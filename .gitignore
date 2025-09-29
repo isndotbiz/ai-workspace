@@ -1,0 +1,171 @@
+# AI Workspace .gitignore
+# ===========================
+
+# Large Model Files (NEVER upload these to GitHub)
+# ------------------------------------------------
+# ComfyUI model directories
+ComfyUI/models/checkpoints/*.safetensors
+ComfyUI/models/checkpoints/*.ckpt
+ComfyUI/models/checkpoints/*.pt
+ComfyUI/models/checkpoints/*.pth
+ComfyUI/models/vae/*.safetensors
+ComfyUI/models/vae/*.ckpt
+ComfyUI/models/vae/*.pt
+ComfyUI/models/vae/*.pth
+ComfyUI/models/clip/*.safetensors
+ComfyUI/models/clip/*.ckpt
+ComfyUI/models/clip/*.pt
+ComfyUI/models/clip/*.pth
+ComfyUI/models/loras/*.safetensors
+ComfyUI/models/loras/*.ckpt
+ComfyUI/models/loras/*.pt
+ComfyUI/models/loras/*.pth
+ComfyUI/models/upscale_models/*
+ComfyUI/models/controlnet/*.safetensors
+ComfyUI/models/controlnet/*.ckpt
+ComfyUI/models/controlnet/*.pt
+ComfyUI/models/controlnet/*.pth
+ComfyUI/models/diffusers/*
+ComfyUI/models/embeddings/*.safetensors
+ComfyUI/models/embeddings/*.pt
+ComfyUI/models/style_models/*
+ComfyUI/models/photomaker/*
+
+# ComfyUI generated outputs
+ComfyUI/output/*
+ComfyUI/temp/*
+ComfyUI/input/*
+
+# But keep the README files in model directories
+!ComfyUI/models/*/README.md
+!ComfyUI/models/*/.gitkeep
+
+# Python Virtual Environment
+# --------------------------
+venv/
+env/
+.env
+.venv
+
+# Python Cache and Bytecode
+# -------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Jupyter Notebook
+# ----------------
+.ipynb_checkpoints
+
+# PyCharm
+# -------
+.idea/
+
+# VS Code
+# -------
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+!.vscode/extensions.json
+
+# Environment Variables
+# --------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+# ----
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS Generated Files
+# -----------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+# --------------
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Personal secrets and tokens
+# ---------------------------
+tokens/
+secrets/
+*.key
+*.pem
+.huggingface_token
+
+# ComfyUI specific ignores
+# -----------------------
+ComfyUI/web/extensions/
+ComfyUI/.git/
+ComfyUI/user/
+
+# But keep important ComfyUI configs
+!ComfyUI/extra_model_paths.yaml
+!ComfyUI/config.ini
+!ComfyUI/web/user.css
+
+# Generated Images (but keep samples)
+# ----------------------------------
+outputs/
+renders/
+generations/
+!samples/
+!examples/
+
+# Keep workflow JSON files (these are important!)
+# ----------------------------------------------
+!workflows/*.json
+!*.json
+
+# Keep documentation and configs
+# -----------------------------
+!README.md
+!CHANGELOG.md
+!LICENSE
+!requirements.txt
+!setup.py
+!*.yaml
+!*.yml
+!*.toml
+!*.cfg
+!*.ini
+
+# Node.js (if using any web interfaces)
+# ------------------------------------
+node_modules/
+package-lock.json
+yarn.lock

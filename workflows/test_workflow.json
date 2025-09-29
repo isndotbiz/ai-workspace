@@ -1,0 +1,15 @@
+{
+  "1": {
+    "inputs": {
+      "text": "a beautiful landscape, high quality, detailed",
+      "clip": ["4", 1]
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "4": {
+    "inputs": {
+      "ckpt_name": "your_model.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple"
+  }
+}
