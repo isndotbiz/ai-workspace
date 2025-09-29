@@ -1,0 +1,106 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "flux1-dev.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "2": {
+    "inputs": {
+      "lora_name": "flux-add-details.safetensors",
+      "strength_model": 0.8,
+      "strength_clip": 0.8,
+      "model": ["1", 0],
+      "clip": ["1", 1]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA - Add Details"
+    }
+  },
+  "3": {
+    "inputs": {
+      "lora_name": "flux-antiblur.safetensors",
+      "strength_model": 0.6,
+      "strength_clip": 0.6,
+      "model": ["2", 0],
+      "clip": ["2", 1]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA - Anti-blur"
+    }
+  },
+  "4": {
+    "inputs": {
+      "text": "A highly detailed, photorealistic portrait of a confident and attractive woman in her 30s, embodying a 'luxury entrepreneur', 'financial muse', and 'exotic motivation figure'. She radiates confidence, allure, and empowerment, posed within a modern penthouse featuring a panoramic city view. The lighting is cinematic, with rich golden-hour tones emphasizing realism and vibrant details. She wears an elegant, form-fitting designer outfit, complemented by subtle jewelry and polished hair and makeup. The atmosphere is aspirational, opulent, and conveys strong motivational energy. Hyperrealistic, ultra-detailed skin texture, cinematic color grading, professional fashion photography aesthetic, sharp depth of field, 8k, masterpiece, award-winning photography, volumetric lighting.",
+      "clip": ["3", 1]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "5": {
+    "inputs": {
+      "text": "cartoon, anime, illustration, painting, blurry, low quality, bad anatomy, deformed, disfigured, monochrome, poorly lit, amateur, ugly, distorted face, bad hands, extra fingers, missing fingers, watermark, signature, text, logo, worst quality, low resolution, pixelated, grainy, oversaturated, undersaturated, overexposed, underexposed",
+      "clip": ["3", 1]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Negative)"
+    }
+  },
+  "6": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "7": {
+    "inputs": {
+      "seed": 1337,
+      "steps": 28,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1.0,
+      "model": ["3", 0],
+      "positive": ["4", 0],
+      "negative": ["5", 0],
+      "latent_image": ["6", 0]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": ["7", 0],
+      "vae": ["1", 2]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "9": {
+    "inputs": {
+      "filename_prefix": "luxury_entrepreneur_portrait",
+      "images": ["8", 0]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  }
+}

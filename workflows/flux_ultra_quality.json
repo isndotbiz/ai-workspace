@@ -1,0 +1,106 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "flux1-dev.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Full Flux Checkpoint"
+    }
+  },
+  "2": {
+    "inputs": {
+      "lora_name": "flux-add-details.safetensors",
+      "strength_model": 1.0,
+      "strength_clip": 1.0,
+      "model": ["1", 0],
+      "clip": ["1", 1]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA - Max Details"
+    }
+  },
+  "3": {
+    "inputs": {
+      "lora_name": "flux-antiblur.safetensors",
+      "strength_model": 0.8,
+      "strength_clip": 0.8,
+      "model": ["2", 0],
+      "clip": ["2", 1]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA - Anti-blur"
+    }
+  },
+  "4": {
+    "inputs": {
+      "text": "PLACEHOLDER_PROMPT_TEXT, ultra-detailed, hyperrealistic, professional photography, award-winning, masterpiece, 8k resolution, perfect composition, cinematic lighting, photorealistic skin texture, fine details, sharp focus",
+      "clip": ["3", 1]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Ultra Prompt)"
+    }
+  },
+  "5": {
+    "inputs": {
+      "text": "cartoon, anime, illustration, painting, blurry, low quality, bad anatomy, deformed, disfigured, poorly lit, amateur, pixelated, grainy, oversaturated, undersaturated, overexposed, underexposed, watermark, signature, text, logo, worst quality, low resolution, soft focus, poor details, compressed, jpeg artifacts",
+      "clip": ["3", 1]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Strong Negative)"
+    }
+  },
+  "6": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "7": {
+    "inputs": {
+      "seed": 12345,
+      "steps": 40,
+      "cfg": 7.5,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": ["3", 0],
+      "positive": ["4", 0],
+      "negative": ["5", 0],
+      "latent_image": ["6", 0]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "Ultra Quality 40-Step Sampler"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": ["7", 0],
+      "vae": ["1", 2]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "9": {
+    "inputs": {
+      "filename_prefix": "ultra_quality",
+      "images": ["8", 0]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Ultra Quality Image"
+    }
+  }
+}
