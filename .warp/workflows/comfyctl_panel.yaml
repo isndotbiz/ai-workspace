@@ -1,0 +1,286 @@
+workflows:
+  comfyctl-panel:
+    name: 🎛️ ComfyUI Control Panel
+    description: Professional AI image generation setup with versioning and testing
+    command: |
+      cd /home/jdm/ai-workspace
+      ./comfyctl.sh
+    
+  install-fp8:
+    name: 📦 Install FP8 Kontext Model
+    description: Download FLUX.1-Kontext FP8 scaled model (11.9GB)
+    command: |
+      cd /home/jdm/ai-workspace
+      source scripts/_log.sh
+      note "Installing FP8 Kontext model via automation"
+      ./comfyctl.sh << 'EOF'
+      1
+      0
+      EOF
+    
+  install-turbo:
+    name: 🚀 Install Turbo LoRA
+    description: Download FLUX.1-Turbo-Alpha for speed optimization
+    command: |
+      cd /home/jdm/ai-workspace
+      source scripts/_log.sh
+      note "Installing Turbo LoRA via automation"
+      ./comfyctl.sh << 'EOF'
+      2
+      0
+      EOF
+      
+  install-photoreal-loras:
+    name: 🎭 Install Photoreal LoRAs
+    description: Curate Kontext-compatible realism LoRAs
+    command: |
+      cd /home/jdm/ai-workspace
+      source scripts/_log.sh
+      note "Installing photoreal LoRAs via automation"
+      ./comfyctl.sh << 'EOF'
+      5
+      0
+      EOF
+      
+  setup-ollama:
+    name: 🧠 Setup AI Prompt Helper
+    description: Install Ollama with llama3.1:8b and mistral:7b for prompt expansion
+    command: |
+      cd /home/jdm/ai-workspace
+      source scripts/_log.sh
+      note "Setting up Ollama AI assistant"
+      ./comfyctl.sh << 'EOF'
+      6
+      0
+      EOF
+      
+  smoke-test:
+    name: 🧪 Run Smoke Test
+    description: Verify all components are working (API, models, services)
+    command: |
+      cd /home/jdm/ai-workspace
+      source scripts/_log.sh
+      note "Running comprehensive smoke test"
+      ./comfyctl.sh << 'EOF'
+      8
+      0
+      EOF
+      
+  expand-prompt:
+    name: 💭 Expand Prompt with AI
+    description: Use local LLM to expand a short concept into detailed prompt
+    command: |
+      cd /home/jdm/ai-workspace
+      
+      echo "🧠 AI Prompt Expansion Tool"
+      echo "=========================="
+      echo ""
+      read -p "Enter your concept: " concept
+      read -p "Model (llama3.1:8b/mistral:7b): " model
+      model=${model:-llama3.1:8b}
+      
+      if [ -n "$concept" ]; then
+        ./scripts/prompt_helper.sh "$model" "$concept"
+      else
+        echo "No concept provided"
+      fi
+      
+      echo ""
+      read -p "Press Enter to continue..."
+      
+  system-status:
+    name: 📊 System Status
+    description: Show current version, disk usage, and service status
+    command: |
+      cd /home/jdm/ai-workspace
+      
+      echo "🎯 COMPREHENSIVE SYSTEM STATUS"
+      echo "==============================="
+      echo ""
+      
+      # Version info
+      if [ -d .git ]; then
+        CURRENT_TAG=$(git describe --tags 2>/dev/null || echo "No tags")
+        COMMIT_COUNT=$(git rev-list --count HEAD 2>/dev/null || echo "0")
+        echo "📋 Git Version: $CURRENT_TAG ($COMMIT_COUNT commits)"
+      fi
+      
+      echo ""
+      echo "💾 Model Storage:"
+      if [ -d ComfyUI/models ]; then
+        du -sh ComfyUI/models/* 2>/dev/null | sort -hr | head -8
+      fi
+      
+      echo ""
+      echo "🔧 Service Status:"
+      pgrep -f "ComfyUI/main.py" >/dev/null && echo "  ✅ ComfyUI running (PID: $(pgrep -f 'ComfyUI/main.py'))" || echo "  ❌ ComfyUI stopped"
+      pgrep ollama >/dev/null && echo "  ✅ Ollama running (PID: $(pgrep ollama))" || echo "  ❌ Ollama stopped"
+      
+      echo ""
+      echo "🎨 Available LoRAs:"
+      if [ -d ComfyUI/models/loras ]; then
+        ls -1 ComfyUI/models/loras/*.safetensors 2>/dev/null | wc -l | xargs echo "  Total LoRAs:"
+        echo "  Recent files:"
+        ls -lt ComfyUI/models/loras/*.safetensors 2>/dev/null | head -5 | while read -r line; do
+          echo "    $(echo "$line" | awk '{print $9}' | xargs basename)"
+        done
+      fi
+      
+      echo ""
+      echo "📈 Disk Usage Summary:"
+      df -h . | tail -1 | awk '{print "  Available: " $4 " / " $2 " (" $5 " used)"}'
+      
+      echo ""
+      read -p "Press Enter to continue..."
+      
+  create-checkpoint:
+    name: 🏷️ Create Version Checkpoint
+    description: Create git tag for current state
+    command: |
+      cd /home/jdm/ai-workspace
+      source scripts/_log.sh
+      
+      echo "📌 CREATE VERSION CHECKPOINT"
+      echo "============================"
+      echo ""
+      
+      # Show current status
+      if [ -d .git ]; then
+        echo "Current version: $(git describe --tags 2>/dev/null || echo 'No tags')"
+        echo "Uncommitted changes: $(git status --porcelain | wc -l)"
+        echo ""
+      fi
+      
+      read -p "Enter new version tag (e.g., v0.2.0): " tag
+      read -p "Enter description: " desc
+      
+      if [ -n "$tag" ]; then
+        note "Creating checkpoint: $tag"
+        git add -A
+        git commit -m "Checkpoint: $tag - $desc" || echo "No changes to commit"
+        
+        if git tag "$tag" 2>/dev/null; then
+          note "✅ Created tag: $tag"
+          echo "Version $tag created successfully!"
+        else
+          note "❌ Tag already exists: $tag"
+          echo "Tag $tag already exists"
+        fi
+      else
+        echo "No tag specified"
+      fi
+      
+      echo ""
+      read -p "Press Enter to continue..."
+      
+  prune-gguf:
+    name: 🗑️ Clean GGUF Files
+    description: Remove old GGUF quantized models (safe cleanup)
+    command: |
+      cd /home/jdm/ai-workspace
+      source scripts/_log.sh
+      
+      echo "🗑️ GGUF FILE CLEANUP"
+      echo "===================="
+      echo ""
+      
+      # Find GGUF files
+      GGUF_FILES=$(find . -name "*.gguf" -type f 2>/dev/null || true)
+      
+      if [ -z "$GGUF_FILES" ]; then
+        echo "✅ No GGUF files found"
+      else
+        echo "Found GGUF files:"
+        echo "$GGUF_FILES" | while read -r file; do
+          [ -f "$file" ] && echo "  $(du -h "$file" | cut -f1) $file"
+        done
+        
+        echo ""
+        read -p "Delete all GGUF files? [y/N]: " confirm
+        
+        if [[ "${confirm:-N}" =~ ^[Yy]$ ]]; then
+          echo "$GGUF_FILES" | while read -r file; do
+            [ -f "$file" ] && rm -f "$file" && note "Deleted: $file"
+          done
+          note "GGUF cleanup completed"
+          echo "✅ GGUF files removed"
+        else
+          note "GGUF cleanup skipped"
+          echo "⏭️ Cleanup skipped"
+        fi
+      fi
+      
+      echo ""
+      read -p "Press Enter to continue..."
+      
+  launch-comfyui:
+    name: 🖥️ Launch ComfyUI Server
+    description: Start ComfyUI server for manual workflow testing
+    command: |
+      cd /home/jdm/ai-workspace/ComfyUI
+      
+      echo "🖥️ LAUNCHING COMFYUI SERVER"
+      echo "==========================="
+      echo ""
+      
+      if pgrep -f "ComfyUI/main.py" >/dev/null; then
+        echo "⚠️  ComfyUI is already running"
+        echo "PID: $(pgrep -f 'ComfyUI/main.py')"
+        echo "URL: http://localhost:8188"
+      else
+        echo "🚀 Starting ComfyUI server..."
+        echo "This will run in the foreground. Press Ctrl+C to stop."
+        echo ""
+        echo "Access URL: http://localhost:8188"
+        echo "API URL: http://localhost:8188/docs"
+        echo ""
+        sleep 2
+        
+        python main.py --listen 0.0.0.0 --port 8188
+      fi
+
+  quick-generation-test:
+    name: ⚡ Quick Generation Test
+    description: Test image generation with current setup
+    command: |
+      cd /home/jdm/ai-workspace
+      
+      echo "⚡ QUICK GENERATION TEST"
+      echo "======================="
+      echo ""
+      
+      # Check if server is running
+      if ! curl -s http://localhost:8188/system_stats >/dev/null 2>&1; then
+        echo "❌ ComfyUI server is not running"
+        echo "Please launch it first using the 'Launch ComfyUI Server' option"
+        read -p "Press Enter to continue..."
+        exit 1
+      fi
+      
+      echo "✅ ComfyUI server is running"
+      echo ""
+      
+      # Generate a simple test prompt
+      read -p "Enter test prompt (or press Enter for default): " prompt
+      prompt=${prompt:-"portrait of a professional photographer, studio lighting, high detail"}
+      
+      echo "🧠 Expanding prompt with AI..."
+      if command -v ollama >/dev/null && ollama list | grep -q llama3.1; then
+        EXPANDED=$(./scripts/prompt_helper.sh llama3.1:8b "$prompt" | tail -n +4)
+        echo "Expanded: $EXPANDED"
+      else
+        EXPANDED="$prompt, photorealistic, professional photography, high detail, cinematic lighting"
+        echo "Using basic expansion: $EXPANDED"
+      fi
+      
+      echo ""
+      echo "🎨 Use this expanded prompt in ComfyUI:"
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo "$EXPANDED"
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo ""
+      echo "💡 Recommended workflow: workflows/flux_kontext_fp8_turbo.json"
+      echo "💡 Recommended settings: 8 steps, CFG 5.0, 1024x1024"
+      echo ""
+      
+      read -p "Press Enter to continue..."
