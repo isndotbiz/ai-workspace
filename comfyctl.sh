@@ -380,6 +380,132 @@ smoke_test(){
     note "Smoke test completed - see results above"
 }
 
+run_ukrainian_test_prompt(){
+    ensure_dirs
+    note "Running Ukrainian girl portrait test with auto-comparison"
+    
+    # Define the detailed Ukrainian girl prompt
+    PROMPT="A hyper-realistic portrait of a late 20s Ukrainian girl with a fair skin tone and medium-length, voluminous balayage haircut, featuring deeper chocolate and rich auburn tones blending into a dark base, styled in an intricate braided crown intertwined with delicate golden wheat stalks and small wildflowers. A few soft, lighter strands still frame her face, each catching the warm, golden studio lights like spun sunlight. Her eyes are a bright, captivating warm brown, radiating a mix of heartfelt warmth and quiet strength, her gaze both gentle and profound. She wears a form-fitting, embroidered cream linen dress, inspired by traditional Ukrainian folk artistry with a modern twist. The dress features a deep V-neckline adorned with intricate gold and red embroidery patterns, wide, flowing sleeves gathered at the wrist, and a high slit subtly revealing her leg. The outfit incorporates delicate, sheer lace accents, with subtle, pearl-like beads catching the light. She stands serenely, her posture graceful and natural, one hand gently holding a small, intricately woven basket filled with ripe berries and wildflowers. The background is a warm, sun-drenched field of tall wheat, comprised of distant rolling hills, vibrant patches of wildflowers, and an ancient oak tree with dappled light filtering through its leaves, providing a serene and enchanting backdrop. Perfect anatomy, ideal body proportions, perfectly rendered hands and arms, complete realistic body structure."
+    
+    BASELINE="$TESTS/baseline_ukrainian_v0_2_0.png"
+    TMP_OUTPUT="$TESTS/tmp_ukrainian_render.png"
+    
+    # Check if ComfyUI is running
+    if ! curl -s http://127.0.0.1:8188/system_stats >/dev/null 2>&1; then
+        note "❌ ComfyUI not running - start it first"
+        return 1
+    fi
+    
+    # Create test workflow with Ukrainian prompt
+    TEST_WORKFLOW="/tmp/ukrainian_test_workflow.json"
+    if [ -f "workflows/flux_kontext_fp8_turbo.json" ]; then
+        cp workflows/flux_kontext_fp8_turbo.json "$TEST_WORKFLOW"
+    elif [ -f "workflows/flux_kontext_fp8.json" ]; then
+        cp workflows/flux_kontext_fp8.json "$TEST_WORKFLOW"
+    else
+        note "❌ No suitable workflow found"
+        return 1
+    fi
+    
+    # Modify workflow parameters
+    python << EOF
+import json
+import time
+
+# Load workflow
+with open("$TEST_WORKFLOW", 'r') as f:
+    workflow = json.load(f)
+
+# Update parameters
+test_seed = int(time.time() % 1000000)
+if "5" in workflow:
+    workflow["5"]["inputs"]["text"] = """$PROMPT"""
+if "8" in workflow:
+    workflow["8"]["inputs"]["batch_size"] = 1
+if "9" in workflow:
+    workflow["9"]["inputs"]["seed"] = test_seed
+    workflow["9"]["inputs"]["steps"] = 12
+if "7" in workflow:
+    workflow["7"]["inputs"]["guidance"] = 6.0
+
+# Save modified workflow
+with open("$TEST_WORKFLOW", 'w') as f:
+    json.dump(workflow, f)
+    
+print(f"Test seed: {test_seed}")
+EOF
+    
+    note "🎨 Queuing Ukrainian portrait test..."
+    
+    # Queue the test
+    RESULT=\$(curl -s -X POST -H "Content-Type: application/json" $
+        -d "{\"prompt\": \$(cat \"$TEST_WORKFLOW\")}" $
+        http://127.0.0.1:8188/prompt)
+    
+    if echo "$RESULT" | grep -q "prompt_id"; then
+        PROMPT_ID=\$(echo "$RESULT" | grep -o '"prompt_id":"[^"]*"' | cut -d'"' -f4)
+        note "✅ Test queued - Prompt ID: $PROMPT_ID"
+        
+        # Wait for generation to complete (simple polling)
+        note "⏳ Waiting for generation to complete..."
+        for i in {1..60}; do
+            sleep 2
+            # Check if new files appeared in output
+            LATEST_FILE=\$(find "$COMFY/output" -name "flux_kontext*.png" -newer "$TEST_WORKFLOW" 2>/dev/null | head -1)
+            if [ -n "$LATEST_FILE" ]; then
+                break
+            fi
+            printf "."
+        done
+        echo ""
+        
+        # Find the generated file
+        LATEST_FILE=\$(find "$COMFY/output" -name "flux_kontext*.png" -newer "$TEST_WORKFLOW" 2>/dev/null | head -1)
+        
+        if [ -n "$LATEST_FILE" ] && [ -f "$LATEST_FILE" ]; then
+            cp "$LATEST_FILE" "$TMP_OUTPUT"
+            
+            # Calculate SHA256 hash
+            NEW_HASH=\$(sha256sum "$TMP_OUTPUT" | cut -d' ' -f1)
+            
+            # Compare with baseline if it exists
+            if [ -f "$BASELINE" ]; then
+                OLD_HASH=\$(sha256sum "$BASELINE" | cut -d' ' -f1)
+                
+                if [ "$NEW_HASH" = "$OLD_HASH" ]; then
+                    note "⏭️ No change in render (hash match: ${NEW_HASH:0:8}...). Skipping commit."
+                    rm "$TMP_OUTPUT"
+                else
+                    mv "$TMP_OUTPUT" "$BASELINE"
+                    note "🔄 Render updated → $BASELINE (hash: ${NEW_HASH:0:8}...)"
+                    git add "$BASELINE"
+                    git commit -m "Updated Ukrainian portrait baseline (${NEW_HASH:0:8})" || echo "Commit skipped"
+                    VERSION_TAG="v0.2.$(date +%s)"
+                    git tag "$VERSION_TAG" 2>/dev/null && note "Created tag: $VERSION_TAG"
+                fi
+            else
+                mv "$TMP_OUTPUT" "$BASELINE"
+                SIZE_MB=\$(du -m "$BASELINE" | cut -f1)
+                note "📸 New baseline created → $BASELINE (${SIZE_MB}MB, hash: ${NEW_HASH:0:8}...)"
+                git add "$BASELINE"
+                git commit -m "Created Ukrainian portrait baseline (${NEW_HASH:0:8})" || echo "Commit skipped"
+                git tag "v0.2.0" 2>/dev/null && note "Created tag: v0.2.0"
+            fi
+        else
+            note "❌ No output file found after generation"
+            return 1
+        fi
+    else
+        note "❌ Failed to queue test generation: $RESULT"
+        return 1
+    fi
+    
+    # Cleanup
+    rm -f "$TEST_WORKFLOW"
+    
+    note "✅ Ukrainian portrait test completed"
+}
+
 show_status(){
     echo ""
     echo "🎯 CURRENT SYSTEM STATUS"
@@ -418,6 +544,8 @@ menu(){
 7) Prune old GGUF files (cleanup, optional)
 8) Run smoke test (API + models verification)
 9) Expand prompt with AI (Ollama helper)
+h) Hunt & test LoRAs (advanced comparison)
+t) Test Ukrainian girl prompt (with auto-comparison)
 s) Show system status
 v) Create version checkpoint (git tag)
 0) Exit
@@ -444,6 +572,8 @@ TXT
                 "$ROOT/scripts/prompt_helper.sh" "$model" "$query"
             fi
             ;;
+        h) "$ROOT/lora_hunter.py";;
+        t) run_ukrainian_test_prompt;;
         s) show_status;;
         v)
             read -rp "Version tag (e.g., v0.2.0): " tag

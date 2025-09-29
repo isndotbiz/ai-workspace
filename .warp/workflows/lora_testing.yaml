@@ -1,0 +1,175 @@
+workflows:
+  lora-hunter:
+    name: 🎯 LoRA Hunter & Tester
+    description: Advanced LoRA discovery and systematic testing with auto-comparison
+    command: |
+      cd /home/jdm/ai-workspace
+      echo "🎯 ADVANCED LORA HUNTER & TESTING PIPELINE"
+      echo "=========================================="
+      echo ""
+      echo "This will:"
+      echo "• Download candidate photorealism LoRAs"
+      echo "• Test multiple combinations systematically" 
+      echo "• Compare results with SHA256 hashing"
+      echo "• Only commit when actual changes occur"
+      echo ""
+      read -p "Continue? [Y/n]: " confirm
+      
+      if [[ "${confirm:-Y}" =~ ^[Yy]$ ]]; then
+        ./lora_hunter.py
+      else
+        echo "Cancelled"
+      fi
+      
+      echo ""
+      read -p "Press Enter to continue..."
+      
+  test-ukrainian-prompt:
+    name: 🇺🇦 Test Ukrainian Portrait
+    description: Run specific Ukrainian girl prompt with auto-comparison
+    command: |
+      cd /home/jdm/ai-workspace
+      source scripts/_log.sh
+      
+      echo "🇺🇦 UKRAINIAN PORTRAIT TEST"
+      echo "=========================="
+      echo ""
+      
+      # Check if ComfyUI is running
+      if ! curl -s http://localhost:8188/system_stats >/dev/null 2>&1; then
+        echo "❌ ComfyUI server is not running"
+        echo "Please start it first using: ./comfyctl.sh → Launch ComfyUI Server"
+        read -p "Press Enter to continue..."
+        exit 1
+      fi
+      
+      echo "✅ ComfyUI server is running"
+      echo ""
+      echo "🎨 Testing Ukrainian portrait with detailed prompt..."
+      echo "This will generate an image and compare with previous baseline"
+      echo ""
+      
+      # Run the test via comfyctl
+      ./comfyctl.sh << 'EOF'
+      t
+      0
+      EOF
+      
+      echo ""
+      read -p "Press Enter to continue..."
+      
+  compare-baselines:
+    name: 📊 Compare Baseline Renders  
+    description: View and compare all baseline test renders
+    command: |
+      cd /home/jdm/ai-workspace
+      
+      echo "📊 BASELINE RENDER COMPARISON"
+      echo "============================="
+      echo ""
+      
+      if [ -d tests/baseline_renders ]; then
+        echo "Available baseline renders:"
+        ls -la tests/baseline_renders/*.png 2>/dev/null | while read -r line; do
+          file=$(echo "$line" | awk '{print $9}')
+          size=$(echo "$line" | awk '{print $5}')
+          date=$(echo "$line" | awk '{print $6, $7, $8}')
+          basename_file=$(basename "$file")
+          echo "  📄 $basename_file (${size} bytes, $date)"
+        done
+        
+        echo ""
+        echo "Git history of baseline changes:"
+        git log --oneline --grep="baseline" | head -10
+        
+      else
+        echo "❌ No baseline renders found"
+        echo "Run some tests first to generate baselines"
+      fi
+      
+      echo ""
+      
+      if [ -f tests/baseline_ukrainian_v0_2_0.png ]; then
+        HASH=$(sha256sum tests/baseline_ukrainian_v0_2_0.png | cut -d' ' -f1)
+        SIZE=$(du -h tests/baseline_ukrainian_v0_2_0.png | cut -f1)
+        echo "📸 Current Ukrainian baseline:"
+        echo "   File: tests/baseline_ukrainian_v0_2_0.png"
+        echo "   Size: $SIZE"
+        echo "   Hash: ${HASH:0:16}..."
+      fi
+      
+      echo ""
+      read -p "Press Enter to continue..."
+      
+  install-realism-loras:
+    name: 📥 Install Realism LoRAs
+    description: Download and install XLabs realism LoRA and fashion LoRA
+    command: |
+      cd /home/jdm/ai-workspace/ComfyUI/models/loras
+      
+      echo "📥 INSTALLING REALISM LORAS"
+      echo "==========================="
+      echo ""
+      
+      # Install XLabs Realism LoRA
+      if [ ! -f "flux-realism-xlabs.safetensors" ]; then
+        echo "📦 Downloading XLabs FLUX Realism LoRA..."
+        python << 'EOF'
+from huggingface_hub import hf_hub_download
+import os
+
+try:
+    downloaded_path = hf_hub_download(
+        repo_id="XLabs-AI/flux-RealismLora",
+        filename="lora.safetensors",
+        local_dir=".",
+        local_dir_use_symlinks=False
+    )
+    
+    if os.path.exists("lora.safetensors"):
+        os.rename("lora.safetensors", "flux-realism-xlabs.safetensors")
+        size_mb = os.path.getsize("flux-realism-xlabs.safetensors") / (1024*1024)
+        print(f"✅ Downloaded XLabs Realism LoRA: {size_mb:.1f} MB")
+        print("💡 Recommended strength: 0.6-0.8 for photorealism")
+    
+except Exception as e:
+    print(f"❌ Failed to download: {e}")
+EOF
+      else
+        echo "✅ XLabs Realism LoRA already present"
+      fi
+      
+      # Install Fashion LoRA (if available)
+      echo ""
+      echo "🎭 Checking for fashion LoRAs..."
+      
+      python << 'EOF'
+from huggingface_hub import list_models
+import requests
+
+# Search for fashion LoRAs
+try:
+    url = "https://huggingface.co/api/models"
+    params = {"search": "flux fashion lora", "limit": 5}
+    
+    response = requests.get(url, params=params, timeout=10)
+    if response.status_code == 200:
+        models = response.json()
+        print("📋 Available Fashion LoRAs:")
+        for model in models[:3]:
+            model_id = model.get('id', '')
+            downloads = model.get('downloads', 0)
+            print(f"   • {model_id} ({downloads:,} downloads)")
+    
+except Exception as e:
+    print(f"⚠️ Fashion LoRA search failed: {e}")
+EOF
+      
+      echo ""
+      echo "✅ LoRA installation completed"
+      echo ""
+      echo "📋 Current LoRAs:"
+      ls -1 *.safetensors | head -10
+      
+      echo ""
+      read -p "Press Enter to continue..."
