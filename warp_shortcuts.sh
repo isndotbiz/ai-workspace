@@ -211,6 +211,76 @@ flux_sync() {
 }
 
 # ============================================================================
+# FLUX KONTEXT GENERATION (FP8 GGUF)
+# ============================================================================
+
+# Flux Kontext - Quick single generation
+flux_kontext() {
+    if [ $# -eq 0 ]; then
+        echo "🎨 Usage: flux_kontext \"concept\" [images] [steps] [cfg]"
+        echo "   Example: flux_kontext \"luxury CEO\" 2 25 1.0"
+        return 1
+    fi
+    
+    local prompt="$1"
+    local images=${2:-2}
+    local steps=${3:-25}
+    local cfg=${4:-1.0}
+    
+    cd /home/jdm/ai-workspace
+    source venv/bin/activate
+    python flux_kontext_generator.py "$prompt" --images $images --steps $steps --cfg $cfg
+}
+
+# Flux Kontext - Professional style
+flux_kontext_pro() {
+    if [ $# -eq 0 ]; then
+        echo "🏢 Usage: flux_kontext_pro \"concept\" [images]"
+        echo "   Example: flux_kontext_pro \"business executive\" 3"
+        return 1
+    fi
+    
+    local prompt="$1"
+    local images=${2:-2}
+    
+    cd /home/jdm/ai-workspace
+    source venv/bin/activate
+    python flux_kontext_generator.py "$prompt" --images $images --style professional --guidance 8.0
+}
+
+# Flux Kontext - Cinematic style
+flux_kontext_cinema() {
+    if [ $# -eq 0 ]; then
+        echo "🎬 Usage: flux_kontext_cinema \"concept\" [images]"
+        echo "   Example: flux_kontext_cinema \"dramatic portrait\" 2"
+        return 1
+    fi
+    
+    local prompt="$1"
+    local images=${2:-2}
+    
+    cd /home/jdm/ai-workspace
+    source venv/bin/activate
+    python flux_kontext_generator.py "$prompt" --images $images --style cinematic --guidance 9.0 --steps 30
+}
+
+# Flux Kontext - Fast generation
+flux_kontext_fast() {
+    if [ $# -eq 0 ]; then
+        echo "⚡ Usage: flux_kontext_fast \"concept\" [images]"
+        echo "   Example: flux_kontext_fast \"tech entrepreneur\" 4"
+        return 1
+    fi
+    
+    local prompt="$1"
+    local images=${2:-2}
+    
+    cd /home/jdm/ai-workspace
+    source venv/bin/activate
+    python flux_kontext_generator.py "$prompt" --images $images --steps 20 --cfg 0.8 --guidance 6.5
+}
+
+# ============================================================================
 # OPTIMIZED GENERATION
 # ============================================================================
 

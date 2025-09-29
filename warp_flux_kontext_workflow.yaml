@@ -1,0 +1,171 @@
+# Warp workflow snippet for flux-kontext
+# Add this to your ~/.warp/workflows.yaml file
+# Then use: warp run flux-kontext "your prompt" --images 3 --steps 25 --cfg 8.0
+
+workflows:
+  flux-kontext:
+    name: Flux Kontext - AI Portrait Generator
+    description: Expand prompts with Ollama and generate portraits using ComfyUI with Flux
+    command: |
+      cd /home/jdm/ai-workspace
+      
+      # Activate environment if needed
+      source activate_workspace.sh >/dev/null 2>&1
+      
+      # Extract arguments
+      PROMPT="$1"
+      IMAGES="${WARP_FLUX_IMAGES:-2}"
+      STEPS="${WARP_FLUX_STEPS:-30}"
+      CFG="${WARP_FLUX_CFG:-7.5}"
+      SEED="${WARP_FLUX_SEED:-$(shuf -i 100000000-999999999 -n 1)}"
+      
+      if [ -z "$PROMPT" ]; then
+        echo "Usage: warp run flux-kontext 'your prompt description' [options]"
+        echo "Options (via environment variables):"
+        echo "  WARP_FLUX_IMAGES=N    Number of images to generate (default: 2)"
+        echo "  WARP_FLUX_STEPS=N     Diffusion steps (default: 30)"
+        echo "  WARP_FLUX_CFG=N       CFG guidance scale (default: 7.5)"
+        echo "  WARP_FLUX_SEED=N      Random seed (default: random)"
+        echo ""
+        echo "Examples:"
+        echo "  warp run flux-kontext 'elegant businesswoman in modern office'"
+        echo "  WARP_FLUX_IMAGES=4 WARP_FLUX_STEPS=25 warp run flux-kontext 'cyberpunk artist'"
+        exit 1
+      fi
+      
+      echo "🎨 Flux Kontext Generator Starting..."
+      echo "Prompt: $PROMPT"
+      echo "Images: $IMAGES | Steps: $STEPS | CFG: $CFG | Seed: $SEED"
+      echo ""
+      
+      # Check if ComfyUI is running
+      if ! curl -s http://localhost:8188/system_stats >/dev/null 2>&1; then
+        echo "⚠️  ComfyUI not running. Starting..."
+        cd ComfyUI && python main.py --listen 127.0.0.1 --port 8188 &
+        sleep 10
+        cd ..
+      fi
+      
+      # Check if Ollama is running
+      if ! curl -s http://localhost:11434/api/tags >/dev/null 2>&1; then
+        echo "⚠️  Ollama not running. Starting..."
+        ollama serve &
+        sleep 5
+      fi
+      
+      # Expand prompt using Ollama
+      echo "🧠 Expanding prompt with Ollama (mistral)..."
+      EXPANDED_PROMPT=$(ollama run mistral "You are an expert at creating detailed, photorealistic portrait descriptions for AI image generation. Transform this concept into a detailed prompt focusing on human subjects, lighting, environment, and technical quality. Keep it under 200 words and emphasize realism: $PROMPT" 2>/dev/null | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g')
+      
+      if [ ${#EXPANDED_PROMPT} -lt 50 ]; then
+        echo "⚠️  Ollama expansion failed, using original prompt"
+        EXPANDED_PROMPT="$PROMPT, photorealistic portrait, professional photography, high detail, cinematic lighting"
+      else
+        echo "✅ Expanded prompt: ${EXPANDED_PROMPT:0:100}..."
+      fi
+      
+      # Create modified workflow with parameters (using FP8 model by default)
+      WORKFLOW_FILE="/tmp/flux_kontext_${SEED}.json"
+      case "${WARP_FLUX_MODEL:-fp8}" in
+        "gguf")
+          cp workflows/flux_kontext.json "$WORKFLOW_FILE"
+          echo "🔧 Using GGUF quantized model (4.9GB)"
+          ;;
+        "turbo")
+          cp workflows/flux_kontext_fp8_turbo.json "$WORKFLOW_FILE"
+          echo "🔧 Using FP8 + Turbo LoRA model (ultra-fast)"
+          STEPS="${WARP_FLUX_STEPS:-8}"  # Override steps for turbo
+          ;;
+        *)
+          cp workflows/flux_kontext_fp8.json "$WORKFLOW_FILE"
+          echo "🔧 Using FP8 scaled model (11.9GB)"
+          ;;
+      esac
+      
+      # Replace parameters in workflow JSON
+      sed -i "s/PLACEHOLDER_PROMPT_TEXT/${EXPANDED_PROMPT//\//\\/}/g" "$WORKFLOW_FILE"
+      sed -i "s/\"batch_size\": 2/\"batch_size\": $IMAGES/g" "$WORKFLOW_FILE"
+      sed -i "s/\"steps\": 30/\"steps\": $STEPS/g" "$WORKFLOW_FILE"
+      sed -i "s/\"guidance\": 7.5/\"guidance\": $CFG/g" "$WORKFLOW_FILE"
+      sed -i "s/\"seed\": 123456789/\"seed\": $SEED/g" "$WORKFLOW_FILE"
+      
+      # Queue workflow in ComfyUI
+      echo "🚀 Queuing generation in ComfyUI..."
+      RESULT=$(curl -s -X POST -H "Content-Type: application/json" \
+        -d "{\"prompt\": $(cat "$WORKFLOW_FILE")}" \
+        http://localhost:8188/prompt)
+      
+      if echo "$RESULT" | grep -q "prompt_id"; then
+        PROMPT_ID=$(echo "$RESULT" | grep -o '"prompt_id":"[^"]*"' | cut -d'"' -f4)
+        echo "✅ Generation started! Prompt ID: $PROMPT_ID"
+        echo "🖼️  Check ComfyUI at http://localhost:8188 to monitor progress"
+        echo "📁 Generated images will be saved to: ComfyUI/output/"
+        
+        # Optional: Wait for completion
+        if [ "${WARP_FLUX_WAIT:-}" = "true" ]; then
+          echo "⏳ Waiting for completion..."
+          while true; do
+            STATUS=$(curl -s "http://localhost:8188/history/$PROMPT_ID" | grep -o '"status":"[^"]*"' | cut -d'"' -f4)
+            if [ "$STATUS" = "success" ]; then
+              echo "✅ Generation completed successfully!"
+              break
+            elif [ "$STATUS" = "error" ]; then
+              echo "❌ Generation failed!"
+              break
+            fi
+            sleep 5
+            echo -n "."
+          done
+        fi
+      else
+        echo "❌ Failed to queue generation: $RESULT"
+      fi
+      
+      # Cleanup
+      rm -f "$WORKFLOW_FILE"
+    
+    args:
+      - name: prompt
+        description: Portrait concept or description to generate
+        required: true
+        
+    environment:
+      WARP_FLUX_IMAGES:
+        description: Number of images to generate
+        default: "2"
+        
+      WARP_FLUX_STEPS:
+        description: Number of diffusion steps (8-50)
+        default: "30"
+        
+      WARP_FLUX_CFG:
+        description: CFG guidance scale (1.0-15.0) 
+        default: "7.5"
+        
+      WARP_FLUX_SEED:
+        description: Random seed for reproducibility
+        default: "random"
+        
+      WARP_FLUX_WAIT:
+        description: Wait for generation to complete (true/false)
+        default: "false"
+        
+      WARP_FLUX_MODEL:
+        description: Model to use (fp8 or gguf)
+        default: "fp8"
+    
+    examples:
+      - description: Generate 2 portraits of elegant businesswoman
+        command: warp run flux-kontext "elegant businesswoman in modern office"
+        
+      - description: Generate 4 images with custom steps and CFG
+        command: WARP_FLUX_IMAGES=4 WARP_FLUX_STEPS=25 WARP_FLUX_CFG=8.5 warp run flux-kontext "cyberpunk artist in neon studio"
+        
+      - description: Generate with specific seed and wait for completion
+        command: WARP_FLUX_SEED=987654321 WARP_FLUX_WAIT=true warp run flux-kontext "renaissance painter portrait"
+        
+      - description: Quick low-step generation
+        command: WARP_FLUX_STEPS=15 WARP_FLUX_CFG=6.0 warp run flux-kontext "modern entrepreneur headshot"
+        
+      - description: Use GGUF model instead of FP8
+        command: WARP_FLUX_MODEL=gguf warp run flux-kontext "portrait of tech executive"
