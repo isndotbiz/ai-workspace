@@ -249,3 +249,159 @@ flux_logs ollama  # View Ollama logs
 ```
 
 This workspace is production-ready and optimized for ultra-fast, high-quality portrait generation using state-of-the-art AI models on RTX 4060 Ti hardware.
+
+---
+
+## Project-Specific AI Agent Rules
+
+These rules apply to all AI interactions within this ai-workspace project:
+
+### 🎯 General Development Guidelines
+
+**Always follow these practices:**
+- Use relative paths for files in the same directory, subdirectories, or parent directories
+- Use absolute paths only for files outside the workspace tree or system-level files
+- Format file references based on current working directory context
+- Maintain clean git history with meaningful commit messages
+- Test all code changes before committing
+- Use the established logging system (scripts/_log.sh) for all operations
+
+**File Path Examples:**
+- Same directory: `comfyctl.sh`, `lora_hunter.py`
+- Subdirectory: `workflows/flux_kontext_fp8_turbo.json`, `ComfyUI/models/loras/`
+- Parent directory: `../some-other-project/file.json`
+- Absolute path: `/etc/nginx/nginx.conf`, `/usr/local/bin/node`
+
+### 🔧 Code Formatting Rules
+
+**All code blocks must follow this format:**
+1. **Real code examples from this codebase:**
+   ```language path=/home/jdm/ai-workspace/file.ext start=LINE_NUM
+   // actual code from the file
+   ```
+
+2. **Hypothetical/example code:**
+   ```language path=null start=null
+   // example code
+   ```
+
+**Requirements:**
+- Always include `path` and `start` metadata after language identifier
+- Use absolute paths for real code from this workspace
+- Set both `path=null start=null` for illustrative code
+- Language identifiers should be lowercase (bash, python, json, etc.)
+
+### 🎨 AI Image Generation Context
+
+**This workspace specializes in:**
+- FLUX.1-dev and FLUX.1-Kontext models (FP8 and GGUF variants)
+- ComfyUI workflow automation
+- LoRA testing and curation for photorealism
+- Ukrainian portrait generation with specific detailed prompts
+- RTX 4060 Ti 16GB optimization (memory-efficient approaches)
+- Ollama integration for prompt expansion (Llama 3.1 8B, Mistral 7B)
+
+**When working with AI image generation:**
+- Always consider VRAM limitations (16GB RTX 4060 Ti)
+- Prefer FP8 models over full precision for memory efficiency
+- Use Turbo LoRAs for speed optimization
+- Implement SHA256 hashing for render comparison
+- Maintain baseline image history for quality tracking
+- Test systematically with multiple LoRA combinations
+
+### 🛠️ Tool-Specific Guidelines
+
+**ComfyUI Operations:**
+- Always check if ComfyUI server is running before API calls
+- Use workflows from the `workflows/` directory
+- Implement proper error handling for generation failures
+- Monitor VRAM usage during operations
+- Save workflows with descriptive names and version control
+
+**LoRA Management:**
+- Download LoRAs to `ComfyUI/models/loras/` directory
+- Use standardized naming conventions (flux-realism-xlabs.safetensors)
+- Test LoRAs systematically with consistent prompts
+- Document strength recommendations for each LoRA
+- Implement comparison testing with baseline renders
+
+**Version Control:**
+- Use semantic versioning for major milestones (v0.1.0, v0.2.0)
+- Commit baseline renders only when SHA256 hash differs
+- Exclude model files (*.safetensors, *.gguf) from git
+- Use descriptive commit messages with hash prefixes
+- Tag important checkpoints for rollback capability
+
+### 🧪 Testing & Validation
+
+**Always implement these testing patterns:**
+- SHA256 hash comparison for render validation
+- Comprehensive smoke tests before major changes
+- Systematic LoRA combination testing
+- Performance benchmarking (generation time, VRAM usage)
+- API connectivity checks before operations
+- Model file integrity verification
+
+**Test Organization:**
+- Save test results in `tests/` directory
+- Create baseline renders in `tests/baseline_renders/`
+- Generate JSON reports for systematic comparisons
+- Implement automated test pipelines via comfyctl.sh
+- Use reproducible seeds for consistent testing
+
+### 📝 Documentation Standards
+
+**When creating or updating documentation:**
+- Use clear, action-oriented headings
+- Include practical code examples
+- Provide performance benchmarks where relevant
+- Document troubleshooting steps for common issues
+- Include version information and timestamps
+- Reference specific file paths and commands
+- Use emoji consistently for visual organization
+
+### 🎛️ CLI Tool Integration
+
+**When working with the control panel (comfyctl.sh):**
+- Use the established menu system for complex operations
+- Implement proper logging via scripts/_log.sh
+- Provide user-friendly status messages
+- Include progress indicators for long operations
+- Handle errors gracefully with fallback options
+- Support both interactive and automated modes
+
+**Warp Integration:**
+- Create workflow definitions in `.warp/workflows/`
+- Use descriptive names and descriptions
+- Include parameter validation and error handling
+- Provide usage examples and expected outcomes
+- Support both quick actions and complex pipelines
+
+### 🔍 Debugging & Troubleshooting
+
+**When debugging issues:**
+- Check service status first (ComfyUI, Ollama)
+- Verify model file presence and integrity
+- Monitor VRAM usage with nvidia-smi
+- Use curl to test API endpoints
+- Implement comprehensive error logging
+- Provide clear user guidance for common failures
+
+**Performance Optimization:**
+- Prefer FP8 quantization over full precision
+- Use appropriate step counts (8-12 for speed, 20+ for quality)
+- Implement batch processing for multiple images
+- Monitor memory usage and implement cleanup
+- Use efficient samplers (euler) and schedulers (simple)
+
+### 🎯 Ukrainian Portrait Specialization
+
+**When working with the specific Ukrainian girl portrait prompt:**
+- Use the full detailed prompt consistently
+- Test with multiple LoRA combinations systematically
+- Focus on realism, traditional dress details, and hair texture
+- Implement comparison with previous renders
+- Document which LoRA combinations improve quality
+- Maintain baseline history for quality progression tracking
+
+These rules ensure consistent, high-quality development practices specific to this AI image generation workspace.
