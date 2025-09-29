@@ -211,6 +211,42 @@ flux_sync() {
 }
 
 # ============================================================================
+# OPTIMIZED GENERATION
+# ============================================================================
+
+# Generate with multi-LoRA realism (best quality)
+flux_realism() {
+    if [ $# -eq 0 ]; then
+        echo "🎨 Usage: flux_realism \"concept\""
+        echo "   Example: flux_realism \"professional headshot of tech CEO\""
+        return 1
+    fi
+    
+    cd /home/jdm/ai-workspace
+    source venv/bin/activate
+    ./ultra_portrait_gen.py --workflow flux_multi_lora_realism.json "$1"
+}
+
+# Ollama-optimized generation
+flux_smart() {
+    if [ $# -eq 0 ]; then
+        echo "🧠 Usage: flux_smart \"concept\" [target_seconds]"
+        echo "   Example: flux_smart \"business portrait\" 90"
+        return 1
+    fi
+    
+    local target_time=${2:-120}
+    cd /home/jdm/ai-workspace
+    source venv/bin/activate
+    
+    # Use optimizer to create workflow
+    python flux_optimizer.py "$1" $target_time
+    
+    # Generate using optimized workflow
+    ./ultra_portrait_gen.py --workflow optimized_workflow.json "$1"
+}
+
+# ============================================================================
 # PRESET CONCEPTS
 # ============================================================================
 
@@ -241,7 +277,9 @@ flux_help() {
 🎨 WARP SHORTCUTS FOR ULTRA LUXURY PORTRAIT GENERATOR
 
 GENERATION:
-  flux_gen "concept"              # Single portrait
+  flux_gen "concept"              # Single portrait (standard)
+  flux_realism "concept"          # Multi-LoRA photorealistic (best quality)
+  flux_smart "concept" [seconds]  # Ollama-optimized (intelligent)
   flux_batch "c1" "c2" "c3"       # Batch generation
   flux_variations 2 "concept"     # Multiple variations
   flux_interactive                # Interactive mode

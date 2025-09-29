@@ -1,0 +1,78 @@
+{
+  "passed": 10,
+  "failed": 0,
+  "success_rate": 100.0,
+  "total_time": 107.86046528816223,
+  "results": [
+    {
+      "test": "Environment Setup",
+      "status": "\u2705 PASS",
+      "message": "All paths and environment verified",
+      "duration": 0.00013947486877441406,
+      "timestamp": 1759153401.1408985
+    },
+    {
+      "test": "Models Presence",
+      "status": "\u2705 PASS",
+      "message": "All models verified - GGUF Model:4991.8MB, CLIP-L:234.7MB, T5-XXL GGUF:2002.2MB, VAE:319.8MB, LoRA Details:655.6MB, LoRA Anti-blur:655.6MB, LoRA Realism:21.4MB",
+      "duration": 0.00013589859008789062,
+      "timestamp": 1759153401.1410775
+    },
+    {
+      "test": "Workflow Files",
+      "status": "\u2705 PASS",
+      "message": "All 3 workflows valid",
+      "duration": 0.0005195140838623047,
+      "timestamp": 1759153401.1416585
+    },
+    {
+      "test": "Ollama Service",
+      "status": "\u2705 PASS",
+      "message": "Service and models fully functional",
+      "duration": 8.13371992111206,
+      "timestamp": 1759153409.2754703
+    },
+    {
+      "test": "ComfyUI Startup",
+      "status": "\u2705 PASS",
+      "message": "ComfyUI already running",
+      "duration": 0.06880378723144531,
+      "timestamp": 1759153409.3444188
+    },
+    {
+      "test": "Optimizer Functionality",
+      "status": "\u2705 PASS",
+      "message": "Optimizer working perfectly",
+      "duration": 12.950763702392578,
+      "timestamp": 1759153422.295323
+    },
+    {
+      "test": "Workflow Generation",
+      "status": "\u2705 PASS",
+      "message": "Image generated successfully (0.7MB)",
+      "duration": 69.9621798992157,
+      "timestamp": 1759153492.2575986
+    },
+    {
+      "test": "Shortcuts Functionality",
+      "status": "\u2705 PASS",
+      "message": "All 6 shortcuts validated",
+      "duration": 0.0028221607208251953,
+      "timestamp": 1759153492.2607026
+    },
+    {
+      "test": "System Integration",
+      "status": "\u2705 PASS",
+      "message": "System integration verified - Workspace CLI functional",
+      "duration": 0.1533362865447998,
+      "timestamp": 1759153492.4141285
+    },
+    {
+      "test": "Performance Benchmarks",
+      "status": "\u2705 PASS",
+      "message": "GPU: Available, Optimizer targets: {'60s_target': 75, '90s_target': 120, '120s_target': 120}",
+      "duration": 16.58694362640381,
+      "timestamp": 1759153509.0011556
+    }
+  ]
+}

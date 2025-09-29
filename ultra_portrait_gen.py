@@ -108,7 +108,7 @@ def generate_enhanced_prompt(concept: str, variation: int = 1) -> Optional[str]:
     full_prompt = f"{style_instruction} for: {concept}"
     
     payload = {
-        "model": "prompter",
+        "model": "mistral",
         "prompt": full_prompt,
         "stream": False,
         "options": {
@@ -409,8 +409,18 @@ Examples:
                        help='Batch mode (submit all, then wait)')
     parser.add_argument('--interactive', '-i', action='store_true',
                        help='Interactive mode')
+    parser.add_argument('--workflow', '-w', type=str, default=None,
+                       help='Override workflow JSON path (relative to workflows/) or absolute path')
     
     args = parser.parse_args()
+
+    # Apply workflow override if provided
+    if args.workflow:
+        wf_path = Path(args.workflow)
+        if not wf_path.is_absolute():
+            wf_path = Path('workflows') / wf_path
+        CONFIG['workflow_path'] = wf_path
+        log(f"Using workflow override: {CONFIG['workflow_path']}", 'info')
     
     if args.interactive:
         interactive_mode()
