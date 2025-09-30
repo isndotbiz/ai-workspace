@@ -18,7 +18,7 @@ import subprocess
 
 # Configuration
 COMFYUI_URL = "http://localhost:8188"
-WORKFLOW_PATH = Path(__file__).parent.parent / "workflows" / "flux_fp8_test.json"
+WORKFLOW_PATH = Path(__file__).parent.parent / "workflows" / "flux_kontext_fp8.json"
 TEST_PROMPT = "A professional portrait of a confident businesswoman, studio lighting, sharp focus, photorealistic"
 TIMEOUT_SECONDS = 300  # 5 minutes max
 
