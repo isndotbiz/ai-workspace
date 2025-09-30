@@ -1,22 +1,23 @@
 {
   "1": {
     "inputs": {
-      "unet_name": "flux1-dev-Q3_K_S.gguf"
+      "unet_name": "flux1-dev-kontext_fp8_scaled.safetensors",
+      "weight_dtype": "fp8_e4m3fn"
     },
-    "class_type": "UnetLoaderGGUF",
+    "class_type": "UNETLoader",
     "_meta": {
-      "title": "Load GGUF UNET"
+      "title": "Load FP8 UNET"
     }
   },
   "2": {
     "inputs": {
       "clip_name1": "clip_l.safetensors",
-      "clip_name2": "t5-v1_1-xxl-encoder-Q3_K_S.gguf",
+      "clip_name2": "t5xxl_fp8_e4m3fn.safetensors",
       "type": "flux"
     },
-    "class_type": "DualCLIPLoaderGGUF",
+    "class_type": "DualCLIPLoader",
     "_meta": {
-      "title": "Load GGUF CLIP"
+      "title": "Load FP8 CLIP"
     }
   },
   "3": {
@@ -33,8 +34,14 @@
       "lora_name": "flux-add-details.safetensors",
       "strength_model": 0.8,
       "strength_clip": 0.8,
-      "model": ["1", 0],
-      "clip": ["2", 0]
+      "model": [
+        "1",
+        0
+      ],
+      "clip": [
+        "2",
+        0
+      ]
     },
     "class_type": "LoraLoader",
     "_meta": {
@@ -46,8 +53,14 @@
       "lora_name": "flux-antiblur.safetensors",
       "strength_model": 0.6,
       "strength_clip": 0.6,
-      "model": ["4", 0],
-      "clip": ["4", 1]
+      "model": [
+        "4",
+        0
+      ],
+      "clip": [
+        "4",
+        1
+      ]
     },
     "class_type": "LoraLoader",
     "_meta": {
@@ -57,7 +70,10 @@
   "6": {
     "inputs": {
       "text": "PLACEHOLDER_PROMPT_TEXT",
-      "clip": ["5", 1]
+      "clip": [
+        "5",
+        1
+      ]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
@@ -67,7 +83,10 @@
   "7": {
     "inputs": {
       "text": "cartoon, anime, illustration, painting, blurry, low quality, bad anatomy, deformed, disfigured, poorly lit, amateur, pixelated, grainy, oversaturated, undersaturated, overexposed, underexposed, watermark, signature, text, logo, worst quality, low resolution",
-      "clip": ["5", 1]
+      "clip": [
+        "5",
+        1
+      ]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
@@ -93,10 +112,22 @@
       "sampler_name": "euler",
       "scheduler": "simple",
       "denoise": 1.0,
-      "model": ["5", 0],
-      "positive": ["6", 0],
-      "negative": ["7", 0],
-      "latent_image": ["8", 0]
+      "model": [
+        "5",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "8",
+        0
+      ]
     },
     "class_type": "KSampler",
     "_meta": {
@@ -105,8 +136,14 @@
   },
   "10": {
     "inputs": {
-      "samples": ["9", 0],
-      "vae": ["3", 0]
+      "samples": [
+        "9",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
     },
     "class_type": "VAEDecode",
     "_meta": {
@@ -116,7 +153,10 @@
   "11": {
     "inputs": {
       "filename_prefix": "balanced_quality",
-      "images": ["10", 0]
+      "images": [
+        "10",
+        0
+      ]
     },
     "class_type": "SaveImage",
     "_meta": {

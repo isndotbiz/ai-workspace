@@ -1,22 +1,23 @@
 {
   "1": {
     "inputs": {
-      "unet_name": "flux1-dev-Q3_K_S.gguf"
+      "unet_name": "flux1-dev-kontext_fp8_scaled.safetensors",
+      "weight_dtype": "fp8_e4m3fn"
     },
-    "class_type": "UnetLoaderGGUF",
+    "class_type": "UNETLoader",
     "_meta": {
-      "title": "Load GGUF UNET"
+      "title": "Load FP8 UNET"
     }
   },
   "2": {
     "inputs": {
       "clip_name1": "clip_l.safetensors",
-      "clip_name2": "t5-v1_1-xxl-encoder-Q3_K_S.gguf",
+      "clip_name2": "t5xxl_fp8_e4m3fn.safetensors",
       "type": "flux"
     },
-    "class_type": "DualCLIPLoaderGGUF",
+    "class_type": "DualCLIPLoader",
     "_meta": {
-      "title": "Load GGUF CLIP"
+      "title": "Load FP8 CLIP"
     }
   },
   "3": {

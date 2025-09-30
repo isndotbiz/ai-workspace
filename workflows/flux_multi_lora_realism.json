@@ -1,22 +1,23 @@
 {
   "1": {
     "inputs": {
-      "unet_name": "flux1-dev-Q3_K_S.gguf"
+      "unet_name": "flux1-dev-kontext_fp8_scaled.safetensors",
+      "weight_dtype": "fp8_e4m3fn"
     },
-    "class_type": "UnetLoaderGGUF",
+    "class_type": "UNETLoader",
     "_meta": {
-      "title": "Load GGUF UNET"
+      "title": "Load FP8 UNET"
     }
   },
   "2": {
     "inputs": {
       "clip_name1": "clip_l.safetensors",
-      "clip_name2": "t5-v1_1-xxl-encoder-Q3_K_S.gguf",
+      "clip_name2": "t5xxl_fp8_e4m3fn.safetensors",
       "type": "flux"
     },
-    "class_type": "DualCLIPLoaderGGUF",
+    "class_type": "DualCLIPLoader",
     "_meta": {
-      "title": "Load GGUF CLIP"
+      "title": "Load FP8 CLIP"
     }
   },
   "3": {
@@ -33,8 +34,14 @@
       "lora_name": "flux-realism-xlabs.safetensors",
       "strength_model": 0.7,
       "strength_clip": 0.7,
-      "model": ["1", 0],
-      "clip": ["2", 0]
+      "model": [
+        "1",
+        0
+      ],
+      "clip": [
+        "2",
+        0
+      ]
     },
     "class_type": "LoraLoader",
     "_meta": {
@@ -46,8 +53,14 @@
       "lora_name": "flux-add-details.safetensors",
       "strength_model": 0.5,
       "strength_clip": 0.5,
-      "model": ["4", 0],
-      "clip": ["4", 1]
+      "model": [
+        "4",
+        0
+      ],
+      "clip": [
+        "4",
+        1
+      ]
     },
     "class_type": "LoraLoader",
     "_meta": {
@@ -59,8 +72,14 @@
       "lora_name": "flux-antiblur.safetensors",
       "strength_model": 0.4,
       "strength_clip": 0.4,
-      "model": ["5", 0],
-      "clip": ["5", 1]
+      "model": [
+        "5",
+        0
+      ],
+      "clip": [
+        "5",
+        1
+      ]
     },
     "class_type": "LoraLoader",
     "_meta": {
@@ -70,7 +89,10 @@
   "7": {
     "inputs": {
       "text": "PLACEHOLDER_PROMPT_TEXT",
-      "clip": ["6", 1]
+      "clip": [
+        "6",
+        1
+      ]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
@@ -80,7 +102,10 @@
   "8": {
     "inputs": {
       "text": "blurry, soft focus, out of focus, low quality, bad quality, amateur, pixelated, grainy, low resolution, distorted, deformed, watermark, signature, text, logo",
-      "clip": ["6", 1]
+      "clip": [
+        "6",
+        1
+      ]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
@@ -106,10 +131,22 @@
       "sampler_name": "euler",
       "scheduler": "simple",
       "denoise": 1.0,
-      "model": ["6", 0],
-      "positive": ["7", 0],
-      "negative": ["8", 0],
-      "latent_image": ["9", 0]
+      "model": [
+        "6",
+        0
+      ],
+      "positive": [
+        "7",
+        0
+      ],
+      "negative": [
+        "8",
+        0
+      ],
+      "latent_image": [
+        "9",
+        0
+      ]
     },
     "class_type": "KSampler",
     "_meta": {
@@ -118,8 +155,14 @@
   },
   "11": {
     "inputs": {
-      "samples": ["10", 0],
-      "vae": ["3", 0]
+      "samples": [
+        "10",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
     },
     "class_type": "VAEDecode",
     "_meta": {
@@ -129,7 +172,10 @@
   "12": {
     "inputs": {
       "filename_prefix": "flux_multi_lora_realism",
-      "images": ["11", 0]
+      "images": [
+        "11",
+        0
+      ]
     },
     "class_type": "SaveImage",
     "_meta": {

@@ -1,11 +1,12 @@
 {
   "1": {
     "inputs": {
-      "unet_name": "flux1-dev-Q3_K_S.gguf"
+      "unet_name": "flux1-dev-kontext_fp8_scaled.safetensors",
+      "weight_dtype": "fp8_e4m3fn"
     },
-    "class_type": "UnetLoaderGGUF",
+    "class_type": "UNETLoader",
     "_meta": {
-      "title": "Unet Loader (GGUF)"
+      "title": "Unet Loader (FP8)"
     }
   },
   "2": {
@@ -14,9 +15,9 @@
       "clip_name2": "t5xxl_fp8_e4m3fn.safetensors",
       "type": "flux"
     },
-    "class_type": "DualCLIPLoaderGGUF",
+    "class_type": "DualCLIPLoader",
     "_meta": {
-      "title": "Load GGUF CLIP"
+      "title": "Load FP8 CLIP"
     }
   },
   "3": {
@@ -31,7 +32,10 @@
   "5": {
     "inputs": {
       "text": "PLACEHOLDER_PROMPT_TEXT",
-      "clip": ["2", 0]
+      "clip": [
+        "2",
+        0
+      ]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
@@ -41,7 +45,10 @@
   "6": {
     "inputs": {
       "text": "deformed, cartoonish, extra fingers, blurry, lowres, bad skin, oversaturated, flat lighting, amateur photography, low quality, distorted anatomy, bad proportions",
-      "clip": ["2", 0]
+      "clip": [
+        "2",
+        0
+      ]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
@@ -50,7 +57,10 @@
   },
   "7": {
     "inputs": {
-      "conditioning": ["5", 0],
+      "conditioning": [
+        "5",
+        0
+      ],
       "guidance": 7.5
     },
     "class_type": "FluxGuidance",
@@ -77,10 +87,22 @@
       "sampler_name": "euler",
       "scheduler": "simple",
       "denoise": 1.0,
-      "model": ["1", 0],
-      "positive": ["7", 0],
-      "negative": ["6", 0],
-      "latent_image": ["8", 0]
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "7",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "latent_image": [
+        "8",
+        0
+      ]
     },
     "class_type": "KSampler",
     "_meta": {
@@ -89,8 +111,14 @@
   },
   "10": {
     "inputs": {
-      "samples": ["9", 0],
-      "vae": ["3", 0]
+      "samples": [
+        "9",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
     },
     "class_type": "VAEDecode",
     "_meta": {
@@ -100,7 +128,10 @@
   "11": {
     "inputs": {
       "filename_prefix": "flux_kontext",
-      "images": ["10", 0]
+      "images": [
+        "10",
+        0
+      ]
     },
     "class_type": "SaveImage",
     "_meta": {

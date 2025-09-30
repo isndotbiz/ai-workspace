@@ -15,7 +15,7 @@
     "class_type": "KSampler"
   },
   "4": {
-    "inputs": {"ckpt_name": "flux1-dev-Q3_K_S.gguf"},
+    "inputs": {"ckpt_name": "flux1-dev-kontext_fp8_scaled.safetensors"},
     "class_type": "CheckpointLoaderSimple"
   },
   "5": {

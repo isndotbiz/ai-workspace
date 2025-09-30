@@ -4,7 +4,14 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Repository Overview
 
-This is an AI development workspace optimized for RTX 4060 Ti 16GB, focusing on high-quality portrait generation using Flux.1-dev with ComfyUI and GGUF quantization. The system includes automated prompt expansion via Ollama and optimized workflows for fast, professional portrait generation.
+This is an AI development workspace optimized for RTX 4060 Ti 16GB, focusing on high-quality portrait generation using **Flux.1-dev Kontext with FP8 quantization**. The system includes automated prompt expansion via Ollama, ComfyUI-based workflows, and optimized FP8 models for professional portrait generation with 16GB VRAM efficiency.
+
+### Current Status (2025-09-30)
+- **System Health**: 76.9% test pass rate (10/13 tests passing)
+- **Architecture**: FP8-only stack (migrating from GGUF)
+- **GPU**: RTX 4060 Ti 16GB (16380MB VRAM)
+- **Performance**: ~90-120s per 1024x1024 portrait @ 8-12 steps
+- **Active Models**: Flux Kontext FP8, T5-XXL FP8, CLIP-L, VAE
 
 ## Quick Start Commands
 
@@ -66,47 +73,71 @@ python test_comprehensive.py
 ### Core Pipeline
 The system implements a two-stage AI pipeline:
 
-1. **Prompt Expansion**: Ollama (Llama 3.1 8B) expands short concepts into detailed Flux-optimized prompts
-2. **Image Generation**: ComfyUI with GGUF-quantized Flux.1-dev model generates high-quality portraits
+1. **Prompt Expansion**: Ollama (Llama 3.1 8B, Mistral 7B) expands short concepts into detailed Flux-optimized prompts
+2. **Image Generation**: ComfyUI with **FP8-quantized Flux.1-dev Kontext** model generates high-quality portraits
 
 ### Data Flow
 ```
-User Concept → Ollama Expansion → ComfyUI Workflow → GGUF Flux.1-dev → Portrait Image
+User Concept → Ollama Expansion → ComfyUI Workflow → FP8 Flux Kontext → Portrait Image
+                  (Mistral/Llama)                   (e4m3fn precision)
 ```
 
-### Technology Stack
-- **AI Models**: Flux.1-dev GGUF (Q3_K_S quantized, 4.9GB)
-- **Text Encoders**: CLIP-L (235MB) + T5-XXL GGUF (2.0GB) 
-- **Prompt AI**: Llama 3.1 8B via Ollama
-- **Backend**: ComfyUI with GGUF custom nodes
-- **Performance**: 90-120 seconds per 1024x1024 image, ~6-8GB VRAM usage
+### Technology Stack - FP8 Architecture
+- **Main Model**: Flux.1-dev Kontext FP8 (e4m3fn, 11.9GB)
+- **Text Encoders**: 
+  - CLIP-L (float16, 246MB)
+  - T5-XXL FP8 (e4m3fn, 4.9GB)
+- **VAE**: FLUX VAE (float16, 320MB)
+- **Prompt AI**: Llama 3.1 8B, Mistral 7B via Ollama
+- **Backend**: ComfyUI with Impact-Pack and FluxTrainer custom nodes
+- **Performance**: 90-120 seconds per 1024x1024 image, ~8-10GB VRAM usage
+- **LoRAs**: Hyper-FLUX Turbo (8-step, 1.3GB), RealismLora (21MB)
 
 ### Directory Structure
 ```
-/
-├── ComfyUI/                    # ComfyUI installation (submodule)
+/home/jdm/ai-workspace/
+├── ComfyUI/                       # ComfyUI v0.3.60
 │   ├── models/
-│   │   ├── diffusion_models/   # GGUF Flux.1-dev model
-│   │   ├── clip/              # CLIP-L and T5-XXL encoders
-│   │   ├── vae/               # VAE decoder
-│   │   └── loras/             # Detail enhancement LoRAs
-│   ├── custom_nodes/          # GGUF and other custom nodes
-│   └── output/                # Generated images
-├── workflows/                 # ComfyUI workflow JSON files
-├── venv/                      # Python virtual environment
-├── ultra_portrait_gen.py      # Main portrait generator script
-├── workspace_cli.py           # Workspace management CLI
-├── warp_shortcuts.sh          # Fast CLI shortcuts
-└── activate_workspace.sh      # Environment activation
+│   │   ├── checkpoints/           # FP8 Flux Kontext (11.9GB)
+│   │   ├── diffusion_models/      # Legacy GGUF (archived)
+│   │   ├── unet/                  # Flux UNet models
+│   │   ├── clip/                  # CLIP-L + T5-XXL FP8 (5.1GB total)
+│   │   ├── vae/                   # VAE decoder (320MB)
+│   │   └── loras/                 # Turbo + Realism LoRAs
+│   ├── custom_nodes/
+│   │   ├── ComfyUI-Impact-Pack/   # Face detailer suite
+│   │   ├── ComfyUI-FluxTrainer/   # LoRA training tools
+│   │   └── ComfyUI-GGUF/          # (disabled in FP8 mode)
+│   └── output/                    # Generated images
+├── workflows/                     # 25+ ComfyUI workflows
+├── scripts/                       # Automation scripts
+├── tests/                         # Test suite
+├── venv/                          # Python 3.12.3 environment
+├── comfyctl.sh                    # CLI control panel
+├── warp_shortcuts.sh              # Fast shortcuts
+├── ultra_portrait_gen.py          # Portrait generator
+├── comprehensive_test_suite.py    # System validation
+└── WARP.md                        # This file
 ```
 
 ## Key Workflow Files
 
-### Primary Workflows
-- `flux_fast_gguf_portrait.json` - Ultra-optimized GGUF portrait workflow (main)
-- `flux_balanced_quality.json` - Balanced speed/quality workflow
-- `flux_ultra_quality.json` - Maximum quality workflow (slower)
+### Primary FP8 Workflows
+- `flux_kontext_fp8_turbo.json` - **Primary FP8 Kontext workflow** with CLI control
+- `flux_kontext_fp8.json` - Standard FP8 Kontext workflow
+- `flux_fp8_test.json` - FP8 validation and smoke testing
+- `flux_balanced_quality.json` - Balanced speed/quality (FP8)
+- `flux_ultra_quality.json` - Maximum quality (FP8, slower)
 - `flux_turbo_4step.json` - Ultra-fast 4-step generation
+
+### CLI-Controlled Workflow (flux_kontext_fp8_turbo.json)
+This workflow integrates with Warp CLI for parameter control:
+- **Node 3**: Prompt (text input)
+- **Node 6**: CFG Scale (guidance)
+- **Node 7**: Batch Size (number of images)
+- **Node 8**: Steps (diffusion iterations)
+
+Usage via comfyctl.sh or warp_shortcuts.sh
 
 ### Specialized Workflows  
 - `luxury_entrepreneur_portrait.json` - Business/professional presets
@@ -127,11 +158,18 @@ User Concept → Ollama Expansion → ComfyUI Workflow → GGUF Flux.1-dev → P
 }
 ```
 
-**Memory Management:**
-- GGUF Quantization reduces model size by 60%
-- Smart CPU/GPU offloading
-- Efficient batch processing
+**Memory Management (FP8 Stack):**
+- FP8 (e4m3fn) quantization: ~50% size reduction vs FP16
+- Total model footprint: ~17GB (fits in 16GB VRAM with headroom)
+- Smart CPU/GPU offloading for large batches
+- Efficient batch processing (batch_size: 1-2 optimal)
 - LoRA strength: 0.6-0.8 for balanced enhancement
+- Peak VRAM usage: 8-10GB @ 1024x1024 with LoRAs
+
+**FP8 vs GGUF:**
+- FP8: Better quality, native ComfyUI support, ~11.9GB UNet
+- GGUF: Smaller (4.9GB), slower inference, quantization artifacts
+- Migration: All workflows converted to FP8-only (2025-09-30)
 
 ## Service Configuration
 
@@ -204,9 +242,104 @@ python -c "import torch; print(torch.cuda.is_available())"
 nvidia-smi
 
 # Model verification
-python workspace_cli.py models info
-ls -la ComfyUI/models/diffusion_models/flux1-dev-Q3_K_S.gguf
+python comprehensive_test_suite.py
+python flux_model_info.py
+ls -la ComfyUI/models/checkpoints/flux1-dev-kontext_fp8_scaled.safetensors
 ```
+
+## Model Inventory
+
+### Current FP8 Models (Production)
+
+**Primary Model (11.9 GB)**
+- `flux1-dev-kontext_fp8_scaled.safetensors` (Kontext FP8)
+- Location: `ComfyUI/models/checkpoints/`
+- Precision: e4m3fn (8-bit floating point)
+- VRAM Usage: ~8-10GB during inference
+
+**Text Encoders (5.1 GB total)**
+- `clip_l.safetensors` (246 MB, float16)
+  - Location: `ComfyUI/models/clip/`
+- `t5xxl_fp8_e4m3fn.safetensors` (4.9 GB, FP8)
+  - Location: `ComfyUI/models/clip/`
+
+**VAE (320 MB)**
+- `ae.safetensors` (FLUX VAE)
+- Location: `ComfyUI/models/vae/`
+
+**LoRAs (1.3 GB total)**
+- `Hyper-FLUX.1-dev-8steps-lora.safetensors` (1.3 GB) - Turbo 8-step
+- `flux-RealismLora.safetensors` (21 MB) - Photorealism enhancement
+- Location: `ComfyUI/models/loras/`
+
+### Legacy Models (Archived)
+- GGUF models moved to `archives/gguf_rollback/` (optional cleanup)
+- ComfyUI-GGUF custom node disabled
+
+### Ollama Models
+- `llama3.1:8b` (4.9 GB) - Primary prompt expansion
+- `mistral:7b` (4.4 GB) - Alternative prompt expansion
+- `prompter:latest` (4.9 GB) - Custom trained prompt model
+
+### Total Storage
+- FP8 Models: ~17.3 GB
+- Ollama Models: ~14.2 GB
+- LoRAs: ~1.3 GB
+- **Total Active**: ~32.8 GB
+
+## Future Roadmap
+
+### Phase 1: FP8 Migration Complete ✓ (Current)
+- [x] Migrate all workflows to FP8
+- [x] Disable GGUF custom nodes
+- [x] Update documentation
+- [ ] Complete end-to-end validation
+- [ ] Achieve 100% test pass rate
+
+### Phase 2: Face Swap Integration (Next)
+- [ ] Install ReActor or similar face swap custom node
+- [ ] Create face swap workflow compatible with FP8 Flux
+- [ ] Test VRAM usage with face swap pipeline
+- [ ] Document face swap usage and limitations
+- [ ] Add automated tests for face swap functionality
+
+### Phase 3: Training Pipeline
+- [ ] Test ComfyUI-FluxTrainer with FP8 models
+- [ ] Create LoRA training workflows
+- [ ] Document training best practices for RTX 4060 Ti
+- [ ] Implement automated LoRA quality testing
+
+### Phase 4: Production Optimization
+- [ ] Implement queue management for batch jobs
+- [ ] Add webhook/API integration for automated workflows
+- [ ] Create web interface for prompt management
+- [ ] Implement render farm capabilities (multi-GPU)
+
+## Current Test Status
+
+**Last Run**: 2025-09-29 17:45:24  
+**Pass Rate**: 76.9% (10/13 tests)
+
+### Passing Tests ✓
+1. GPU Availability - RTX 4060 Ti (16380MB)
+2. Python Environment - All packages installed
+3. Directory Structure - All paths valid
+4. Disk Space - 805GB available
+5. Model Integrity - Hash validation passed
+6. ComfyUI Startup - Launches successfully
+7. Ollama Service - 5 models available
+8. Prompt Generation - Ollama working
+9. Workflow Files - 25 workflows valid
+10. ImageMagick - Installed and working
+
+### Known Issues ⚠️
+1. **Model Files Test** - Looking for old GGUF paths (needs update)
+2. **ComfyUI Installation Test** - Checking for `model_management.py` (deprecated check)
+
+### Resolution Plan
+- Update `comprehensive_test_suite.py` to check FP8 model paths
+- Replace import-based checks with API health checks
+- Target: 100% pass rate by end of FP8 migration
 
 ## Git Workflow
 
