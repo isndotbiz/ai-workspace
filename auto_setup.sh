@@ -135,43 +135,56 @@ download_models() {
     cd "$ROOT"
     source venv/bin/activate
     
-    # Download FLUX.1-dev model
+    # Download FLUX.1-dev FP8 Kontext model
     python3 << 'EOF'
 import os
 from huggingface_hub import hf_hub_download
 
 models_dir = "/home/jdm/ai-workspace/ComfyUI/models"
-os.makedirs(f"{models_dir}/unet", exist_ok=True)
+os.makedirs(f"{models_dir}/checkpoints", exist_ok=True)
 
-print("🔗 Downloading FLUX.1-dev GGUF model...")
+print("🔗 Downloading FLUX.1-dev FP8 Kontext model...")
 try:
     hf_hub_download(
-        repo_id="city96/FLUX.1-dev-gguf",
-        filename="flux1-dev-Q3_K_S.gguf",
-        local_dir=f"{models_dir}/unet",
+        repo_id="Comfy-Org/flux1-kontext-dev_ComfyUI",
+        filename="split_files/diffusion_models/flux1-dev-kontext_fp8_scaled.safetensors",
+        local_dir=f"{models_dir}/checkpoints",
         local_dir_use_symlinks=False
     )
-    print("✅ FLUX.1-dev GGUF downloaded")
+    
+    # Move file to correct location if needed
+    import shutil
+    src = f"{models_dir}/checkpoints/split_files/diffusion_models/flux1-dev-kontext_fp8_scaled.safetensors"
+    dst = f"{models_dir}/checkpoints/flux1-dev-kontext_fp8_scaled.safetensors"
+    
+    if os.path.exists(src):
+        shutil.move(src, dst)
+        shutil.rmtree(f"{models_dir}/checkpoints/split_files", ignore_errors=True)
+        print("✅ FLUX.1-dev FP8 Kontext downloaded")
+    else:
+        print("❌ Failed to move FP8 model")
 except Exception as e:
-    print(f"❌ Failed to download FLUX.1-dev: {e}")
+    print(f"❌ Failed to download FLUX.1-dev FP8: {e}")
 
-print("🔗 Downloading text encoders...")
+print("🔗 Downloading FP8 text encoders...")
 try:
+    # Download CLIP-L
     hf_hub_download(
-        repo_id="comfyanonymous/flux_text_encoders", 
+        repo_id="Comfy-Org/flux1-dev",
         filename="clip_l.safetensors",
         local_dir=f"{models_dir}/clip",
         local_dir_use_symlinks=False
     )
+    # Download T5-XXL FP8
     hf_hub_download(
-        repo_id="comfyanonymous/flux_text_encoders",
-        filename="t5xxl_fp16.safetensors", 
+        repo_id="Comfy-Org/flux1-dev",
+        filename="t5xxl_fp8_e4m3fn.safetensors", 
         local_dir=f"{models_dir}/clip",
         local_dir_use_symlinks=False
     )
-    print("✅ Text encoders downloaded")
+    print("✅ FP8 text encoders downloaded")
 except Exception as e:
-    print(f"❌ Failed to download encoders: {e}")
+    print(f"❌ Failed to download FP8 encoders: {e}")
 
 print("🔗 Downloading VAE...")
 try:

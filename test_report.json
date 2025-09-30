@@ -1,0 +1,228 @@
+{
+  "timestamp": "2025-09-29 17:45:24",
+  "total_duration": 30.3,
+  "total_tests": 13,
+  "status_counts": {
+    "PASS": 10,
+    "FAIL": 2,
+    "WARN": 0,
+    "SKIP": 1
+  },
+  "success_rate": 76.9,
+  "critical_failures": [
+    {
+      "name": "Model Files",
+      "message": "Missing models: ['FLUX.1-dev GGUF', 'T5-XXL']"
+    },
+    {
+      "name": "ComfyUI Installation",
+      "message": "Missing ComfyUI files: ['model_management.py']"
+    }
+  ],
+  "warnings": [],
+  "all_results": [
+    {
+      "name": "GPU Availability",
+      "status": "PASS",
+      "message": "GPU OK: NVIDIA GeForce RTX 4060 Ti (16380MB)",
+      "duration": 0.05,
+      "details": {
+        "gpus": [
+          {
+            "name": "NVIDIA GeForce RTX 4060 Ti",
+            "total_memory_mb": 16380,
+            "free_memory_mb": 7053
+          }
+        ]
+      }
+    },
+    {
+      "name": "Python Environment",
+      "status": "PASS",
+      "message": "Python environment OK (7 packages)",
+      "duration": 2.75,
+      "details": {
+        "installed": {
+          "torch": "2.5.1+cu121",
+          "torchvision": "0.20.1+cu121",
+          "huggingface_hub": "0.35.2",
+          "transformers": "4.56.2",
+          "pillow": "11.0.0",
+          "numpy": "2.1.2",
+          "requests": "2.32.5"
+        }
+      }
+    },
+    {
+      "name": "Directory Structure",
+      "status": "PASS",
+      "message": "Directory structure OK (11 dirs)",
+      "duration": 0.0,
+      "details": {
+        "existing": [
+          "ComfyUI",
+          "ComfyUI/models",
+          "ComfyUI/models/checkpoints",
+          "ComfyUI/models/loras",
+          "ComfyUI/models/clip",
+          "ComfyUI/models/vae",
+          "ComfyUI/models/unet",
+          "workflows",
+          "scripts",
+          "tests",
+          "venv"
+        ]
+      }
+    },
+    {
+      "name": "Disk Space",
+      "status": "PASS",
+      "message": "Disk space OK: 805G available",
+      "duration": 0.0,
+      "details": {
+        "total": "1007G",
+        "used": "152G",
+        "available": "805G",
+        "use_percent": "16%"
+      }
+    },
+    {
+      "name": "Model Files",
+      "status": "FAIL",
+      "message": "Missing models: ['FLUX.1-dev GGUF', 'T5-XXL']",
+      "duration": 0.0,
+      "details": {
+        "FLUX.1-dev GGUF": {
+          "exists": false,
+          "path": "/home/jdm/ai-workspace/ComfyUI/models/unet/flux1-dev-Q3_K_S.gguf"
+        },
+        "CLIP-L": {
+          "exists": true,
+          "size_mb": 234.7,
+          "path": "/home/jdm/ai-workspace/ComfyUI/models/clip/clip_l.safetensors"
+        },
+        "T5-XXL": {
+          "exists": false,
+          "path": "/home/jdm/ai-workspace/ComfyUI/models/clip/t5xxl_fp16.safetensors"
+        },
+        "VAE": {
+          "exists": true,
+          "size_mb": 319.8,
+          "path": "/home/jdm/ai-workspace/ComfyUI/models/vae/ae.safetensors"
+        },
+        "Turbo LoRA": {
+          "exists": true,
+          "size_mb": 1323.7,
+          "path": "/home/jdm/ai-workspace/ComfyUI/models/loras/Hyper-FLUX.1-dev-8steps-lora.safetensors"
+        },
+        "Realism LoRA": {
+          "exists": true,
+          "size_mb": 21.4,
+          "path": "/home/jdm/ai-workspace/ComfyUI/models/loras/flux-RealismLora.safetensors"
+        }
+      }
+    },
+    {
+      "name": "Model Integrity",
+      "status": "PASS",
+      "message": "Model integrity OK (2 files checked)",
+      "duration": 0.01,
+      "details": {
+        "ComfyUI/models/clip/clip_l.safetensors": "55494418a40151a9",
+        "ComfyUI/models/vae/ae.safetensors": "a0c4c618464cdfcb"
+      }
+    },
+    {
+      "name": "ComfyUI Installation",
+      "status": "FAIL",
+      "message": "Missing ComfyUI files: ['model_management.py']",
+      "duration": 0.0,
+      "details": {}
+    },
+    {
+      "name": "ComfyUI Startup",
+      "status": "PASS",
+      "message": "ComfyUI starts successfully",
+      "duration": 10.6,
+      "details": {
+        "output_sample": "[START] Security scan\n[DONE] Security scan\n## ComfyUI-Manager: installing dependencies done.\n** ComfyUI startup time: 2025-09-29 17:44:57.184\n** Platform: Linux\n** Python version: 3.12.3 (main, Aug 14"
+      }
+    },
+    {
+      "name": "Ollama Service",
+      "status": "PASS",
+      "message": "Ollama OK (5 models)",
+      "duration": 0.05,
+      "details": {
+        "available": [
+          "mistral:7b",
+          "llama3.1:8b",
+          "mistral:latest",
+          "prompter:latest",
+          "llama3.1:8b-instruct-q4_K_M"
+        ]
+      }
+    },
+    {
+      "name": "Prompt Generation",
+      "status": "PASS",
+      "message": "Prompt generation works",
+      "duration": 16.78,
+      "details": {
+        "sample_response": "Here is a short portrait description:\n\nShe stood tall with an effortless elegance, her bright green "
+      }
+    },
+    {
+      "name": "Workflow Files",
+      "status": "PASS",
+      "message": "Workflows OK (25 files)",
+      "duration": 0.01,
+      "details": {
+        "valid": [
+          "flux_ultra_fast_8step.json",
+          "luxury_entrepreneur_portrait.json",
+          "flux_basic_with_lora.json",
+          "enigmatic_patroness_portrait.json",
+          "flux_ultra_fast_gguf.json",
+          "flux_advanced_complex_prompt.json",
+          "flux_balanced_quality.json",
+          "test_workflow.json",
+          "apex_executive_portrait.json",
+          "luxury_entrepreneur_portrait_fixed.json",
+          "parsed_complex_workflow.json",
+          "flux_kontext_fp8_turbo.json",
+          "flux_portrait_lora.json",
+          "flux_multi_lora_realism.json",
+          "global_adventurer_portrait.json",
+          "flux_fast_gguf_portrait.json",
+          "flux_kontext.json",
+          "flux_simple_portrait.json",
+          "flux_upscale_4k.json",
+          "luxury_entrepreneur_flux_proper.json",
+          "optimized_workflow.json",
+          "flux_turbo_4step.json",
+          "flux_kontext_fp8.json",
+          "flux_ultra_quality.json",
+          "flux_basic.json"
+        ],
+        "invalid": []
+      }
+    },
+    {
+      "name": "Baseline Images",
+      "status": "SKIP",
+      "message": "No baseline images found",
+      "duration": 0.0,
+      "details": {}
+    },
+    {
+      "name": "ImageMagick",
+      "status": "PASS",
+      "message": "ImageMagick available",
+      "duration": 0.04,
+      "details": {
+        "version": "Version: ImageMagick 6.9.12-98 Q16 x86_64 18038 https://legacy.imagemagick.org"
+      }
+    }
+  ]
+}

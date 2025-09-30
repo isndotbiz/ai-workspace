@@ -207,9 +207,9 @@ class AIWorkspaceTestSuite:
     def test_model_files(self) -> Tuple[str, str, Dict]:
         """Test existence and integrity of AI model files"""
         model_files = {
-            "FLUX.1-dev GGUF": "ComfyUI/models/unet/flux1-dev-Q3_K_S.gguf",
+            "FLUX.1-dev FP8": "ComfyUI/models/checkpoints/flux1-dev-kontext_fp8_scaled.safetensors",
             "CLIP-L": "ComfyUI/models/clip/clip_l.safetensors",
-            "T5-XXL": "ComfyUI/models/clip/t5xxl_fp16.safetensors", 
+            "T5-XXL FP8": "ComfyUI/models/clip/t5xxl_fp8_e4m3fn.safetensors", 
             "VAE": "ComfyUI/models/vae/ae.safetensors",
             "Turbo LoRA": "ComfyUI/models/loras/Hyper-FLUX.1-dev-8steps-lora.safetensors",
             "Realism LoRA": "ComfyUI/models/loras/flux-RealismLora.safetensors"
@@ -242,7 +242,7 @@ class AIWorkspaceTestSuite:
     def test_model_integrity(self) -> Tuple[str, str, Dict]:
         """Test model file integrity using checksums"""
         critical_models = [
-            "ComfyUI/models/unet/flux1-dev-Q3_K_S.gguf",
+            "ComfyUI/models/checkpoints/flux1-dev-kontext_fp8_scaled.safetensors",
             "ComfyUI/models/clip/clip_l.safetensors",
             "ComfyUI/models/vae/ae.safetensors"
         ]
