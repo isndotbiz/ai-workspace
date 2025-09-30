@@ -33,9 +33,9 @@ from typing import List, Dict, Optional
 CONFIG = {
     'comfyui_url': 'http://localhost:8188',
     'ollama_url': 'http://localhost:11434',
-    'workflow_path': Path('workflows/flux_fast_gguf_portrait.json'),
+    'workflow_path': Path('workflows/flux_kontext_fp8_turbo.json'),
     'output_dir': Path('ComfyUI/output'),
-    'generation_timeout': 150,  # 2.5 minutes max
+    'generation_timeout': 180,  # 3 minutes max for FP8
     'prompt_timeout': 15,       # 15 seconds for prompt generation
     'max_retries': 2,
     'poll_interval': 2,         # Check every 2 seconds
@@ -158,20 +158,23 @@ def customize_workflow(template: Dict, prompt: str, filename: str, seed: int) ->
     """Customize workflow with specific parameters"""
     workflow = template.copy()
     
-    # Update text prompt
+    # Update text prompt (Node 5)
     workflow['5']['inputs']['text'] = prompt
     
-    # Update generation parameters optimized for RTX 4060 Ti
-    workflow['8']['inputs'].update({
+    # Update batch size to 1 for single generation (Node 8)
+    workflow['8']['inputs']['batch_size'] = 1
+    
+    # Update generation parameters optimized for FP8 (Node 9)
+    workflow['9']['inputs'].update({
         'seed': seed,
-        'steps': 10,        # Optimal for GGUF speed
-        'cfg': 2.0,         # Faster convergence
+        'steps': 10,        # Optimal for FP8 Turbo (8-12 range)
+        'cfg': 1.0,         # Turbo LoRA uses lower CFG
         'sampler_name': 'euler',
         'scheduler': 'simple'
     })
     
-    # Update filename
-    workflow['10']['inputs']['filename_prefix'] = filename
+    # Update filename (Node 11)
+    workflow['11']['inputs']['filename_prefix'] = filename
     
     return workflow
 
