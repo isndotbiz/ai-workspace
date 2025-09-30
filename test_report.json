@@ -1,37 +1,28 @@
 {
-  "timestamp": "2025-09-29 17:45:24",
-  "total_duration": 30.3,
+  "timestamp": "2025-09-29 20:14:51",
+  "total_duration": 25.94,
   "total_tests": 13,
   "status_counts": {
-    "PASS": 10,
-    "FAIL": 2,
+    "PASS": 12,
+    "FAIL": 0,
     "WARN": 0,
     "SKIP": 1
   },
-  "success_rate": 76.9,
-  "critical_failures": [
-    {
-      "name": "Model Files",
-      "message": "Missing models: ['FLUX.1-dev GGUF', 'T5-XXL']"
-    },
-    {
-      "name": "ComfyUI Installation",
-      "message": "Missing ComfyUI files: ['model_management.py']"
-    }
-  ],
+  "success_rate": 92.3,
+  "critical_failures": [],
   "warnings": [],
   "all_results": [
     {
       "name": "GPU Availability",
       "status": "PASS",
       "message": "GPU OK: NVIDIA GeForce RTX 4060 Ti (16380MB)",
-      "duration": 0.05,
+      "duration": 0.1,
       "details": {
         "gpus": [
           {
             "name": "NVIDIA GeForce RTX 4060 Ti",
             "total_memory_mb": 16380,
-            "free_memory_mb": 7053
+            "free_memory_mb": 1813
           }
         ]
       }
@@ -40,7 +31,7 @@
       "name": "Python Environment",
       "status": "PASS",
       "message": "Python environment OK (7 packages)",
-      "duration": 2.75,
+      "duration": 3.02,
       "details": {
         "installed": {
           "torch": "2.5.1+cu121",
@@ -48,7 +39,7 @@
           "huggingface_hub": "0.35.2",
           "transformers": "4.56.2",
           "pillow": "11.0.0",
-          "numpy": "2.1.2",
+          "numpy": "2.2.6",
           "requests": "2.32.5"
         }
       }
@@ -77,33 +68,35 @@
     {
       "name": "Disk Space",
       "status": "PASS",
-      "message": "Disk space OK: 805G available",
+      "message": "Disk space OK: 799G available",
       "duration": 0.0,
       "details": {
         "total": "1007G",
-        "used": "152G",
-        "available": "805G",
-        "use_percent": "16%"
+        "used": "157G",
+        "available": "799G",
+        "use_percent": "17%"
       }
     },
     {
       "name": "Model Files",
-      "status": "FAIL",
-      "message": "Missing models: ['FLUX.1-dev GGUF', 'T5-XXL']",
+      "status": "PASS",
+      "message": "All models found (17919.9 GB total)",
       "duration": 0.0,
       "details": {
-        "FLUX.1-dev GGUF": {
-          "exists": false,
-          "path": "/home/jdm/ai-workspace/ComfyUI/models/unet/flux1-dev-Q3_K_S.gguf"
+        "FLUX.1-dev FP8": {
+          "exists": true,
+          "size_mb": 11353.1,
+          "path": "/home/jdm/ai-workspace/ComfyUI/models/checkpoints/flux1-dev-kontext_fp8_scaled.safetensors"
         },
         "CLIP-L": {
           "exists": true,
           "size_mb": 234.7,
           "path": "/home/jdm/ai-workspace/ComfyUI/models/clip/clip_l.safetensors"
         },
-        "T5-XXL": {
-          "exists": false,
-          "path": "/home/jdm/ai-workspace/ComfyUI/models/clip/t5xxl_fp16.safetensors"
+        "T5-XXL FP8": {
+          "exists": true,
+          "size_mb": 4667.2,
+          "path": "/home/jdm/ai-workspace/ComfyUI/models/clip/t5xxl_fp8_e4m3fn.safetensors"
         },
         "VAE": {
           "exists": true,
@@ -125,34 +118,52 @@
     {
       "name": "Model Integrity",
       "status": "PASS",
-      "message": "Model integrity OK (2 files checked)",
-      "duration": 0.01,
+      "message": "Model integrity OK (3 files checked)",
+      "duration": 0.02,
       "details": {
+        "ComfyUI/models/checkpoints/flux1-dev-kontext_fp8_scaled.safetensors": "ff33d9de074f6e4e",
         "ComfyUI/models/clip/clip_l.safetensors": "55494418a40151a9",
         "ComfyUI/models/vae/ae.safetensors": "a0c4c618464cdfcb"
       }
     },
     {
       "name": "ComfyUI Installation",
-      "status": "FAIL",
-      "message": "Missing ComfyUI files: ['model_management.py']",
-      "duration": 0.0,
-      "details": {}
+      "status": "PASS",
+      "message": "ComfyUI installation OK (13 custom nodes, API responding)",
+      "duration": 0.04,
+      "details": {
+        "custom_nodes": [
+          "__pycache__",
+          "ComfyUI-Impact-Pack",
+          "ComfyUI-GGUF.disabled",
+          "was-node-suite-comfyui",
+          "ComfyUI-FluxTrainer",
+          "comfyui-ollama",
+          "ComfyUI_UltimateSDUpscale",
+          "ComfyUI-Text-Utils",
+          "ComfyUI-Custom-Scripts",
+          "rgthree-comfy",
+          "ComfyUI-Easy-Use",
+          "ComfyUI-Advanced-ControlNet",
+          "ComfyUI-Manager"
+        ],
+        "api_status": "API responding"
+      }
     },
     {
       "name": "ComfyUI Startup",
       "status": "PASS",
       "message": "ComfyUI starts successfully",
-      "duration": 10.6,
+      "duration": 15.67,
       "details": {
-        "output_sample": "[START] Security scan\n[DONE] Security scan\n## ComfyUI-Manager: installing dependencies done.\n** ComfyUI startup time: 2025-09-29 17:44:57.184\n** Platform: Linux\n** Python version: 3.12.3 (main, Aug 14"
+        "output_sample": "[START] Security scan\n[DONE] Security scan\n## ComfyUI-Manager: installing dependencies done.\n** ComfyUI startup time: 2025-09-29 20:14:29.868\n** Platform: Linux\n** Python version: 3.12.3 (main, Aug 14"
       }
     },
     {
       "name": "Ollama Service",
       "status": "PASS",
       "message": "Ollama OK (5 models)",
-      "duration": 0.05,
+      "duration": 0.11,
       "details": {
         "available": [
           "mistral:7b",
@@ -167,15 +178,15 @@
       "name": "Prompt Generation",
       "status": "PASS",
       "message": "Prompt generation works",
-      "duration": 16.78,
+      "duration": 6.94,
       "details": {
-        "sample_response": "Here is a short portrait description:\n\nShe stood tall with an effortless elegance, her bright green "
+        "sample_response": "Hello! How can I assist you today?"
       }
     },
     {
       "name": "Workflow Files",
       "status": "PASS",
-      "message": "Workflows OK (25 files)",
+      "message": "Workflows OK (28 files)",
       "duration": 0.01,
       "details": {
         "valid": [
@@ -190,8 +201,11 @@
           "apex_executive_portrait.json",
           "luxury_entrepreneur_portrait_fixed.json",
           "parsed_complex_workflow.json",
+          "flux_kontext_fp8_upscale_4x.json",
+          "flux_fp8_test.json",
           "flux_kontext_fp8_turbo.json",
           "flux_portrait_lora.json",
+          "flux_kontext_ultimate_portrait.json",
           "flux_multi_lora_realism.json",
           "global_adventurer_portrait.json",
           "flux_fast_gguf_portrait.json",
@@ -219,7 +233,7 @@
       "name": "ImageMagick",
       "status": "PASS",
       "message": "ImageMagick available",
-      "duration": 0.04,
+      "duration": 0.03,
       "details": {
         "version": "Version: ImageMagick 6.9.12-98 Q16 x86_64 18038 https://legacy.imagemagick.org"
       }

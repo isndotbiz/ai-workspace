@@ -1,0 +1,468 @@
+{
+  "summary": {
+    "total_tests": 65,
+    "passed": 62,
+    "failed": 0,
+    "warnings": 1,
+    "duration_seconds": 3.32,
+    "success_rate": 95.4
+  },
+  "results": [
+    {
+      "test": "workspace_directory",
+      "status": "PASS",
+      "message": "In correct workspace: /home/jdm/ai-workspace",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419593"
+    },
+    {
+      "test": "directory_venv",
+      "status": "PASS",
+      "message": "Directory exists: venv",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419634"
+    },
+    {
+      "test": "directory_ComfyUI",
+      "status": "PASS",
+      "message": "Directory exists: ComfyUI",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419652"
+    },
+    {
+      "test": "directory_workflows",
+      "status": "PASS",
+      "message": "Directory exists: workflows",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419666"
+    },
+    {
+      "test": "directory_ComfyUI_models",
+      "status": "PASS",
+      "message": "Directory exists: ComfyUI/models",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419682"
+    },
+    {
+      "test": "directory_ComfyUI_models_checkpoints",
+      "status": "PASS",
+      "message": "Directory exists: ComfyUI/models/checkpoints",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419697"
+    },
+    {
+      "test": "directory_ComfyUI_models_clip",
+      "status": "PASS",
+      "message": "Directory exists: ComfyUI/models/clip",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419711"
+    },
+    {
+      "test": "directory_ComfyUI_models_vae",
+      "status": "PASS",
+      "message": "Directory exists: ComfyUI/models/vae",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419725"
+    },
+    {
+      "test": "directory_ComfyUI_models_loras",
+      "status": "PASS",
+      "message": "Directory exists: ComfyUI/models/loras",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419739"
+    },
+    {
+      "test": "directory_ComfyUI_models_unet",
+      "status": "PASS",
+      "message": "Directory exists: ComfyUI/models/unet",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419755"
+    },
+    {
+      "test": "file_README_md",
+      "status": "PASS",
+      "message": "File exists: README.md",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419774"
+    },
+    {
+      "test": "file_CHANGELOG_md",
+      "status": "PASS",
+      "message": "File exists: CHANGELOG.md",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419791"
+    },
+    {
+      "test": "file_requirements_txt",
+      "status": "PASS",
+      "message": "File exists: requirements.txt",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419834"
+    },
+    {
+      "test": "file_activate_workspace_sh",
+      "status": "PASS",
+      "message": "File exists: activate_workspace.sh",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419856"
+    },
+    {
+      "test": "file_sync_to_github_sh",
+      "status": "PASS",
+      "message": "File exists: sync_to_github.sh",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419869"
+    },
+    {
+      "test": "file__gitignore",
+      "status": "PASS",
+      "message": "File exists: .gitignore",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419881"
+    },
+    {
+      "test": "python_version",
+      "status": "PASS",
+      "message": "Python 3.12.3",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419889"
+    },
+    {
+      "test": "disk_space",
+      "status": "PASS",
+      "message": "799.0GB free disk space",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.419921"
+    },
+    {
+      "test": "cuda_available",
+      "status": "PASS",
+      "message": "CUDA available with NVIDIA GeForce RTX 4060 Ti",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.498392"
+    },
+    {
+      "test": "gpu_memory",
+      "status": "PASS",
+      "message": "16.0GB VRAM available",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.498414"
+    },
+    {
+      "test": "virtual_env",
+      "status": "PASS",
+      "message": "Running in virtual environment",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.498423"
+    },
+    {
+      "test": "dependency_torch",
+      "status": "PASS",
+      "message": "torch 2.5.1+cu121",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:08.498431"
+    },
+    {
+      "test": "dependency_torchvision",
+      "status": "PASS",
+      "message": "torchvision 0.20.1+cu121",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.530289"
+    },
+    {
+      "test": "dependency_numpy",
+      "status": "PASS",
+      "message": "numpy 2.2.6",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.530307"
+    },
+    {
+      "test": "dependency_requests",
+      "status": "PASS",
+      "message": "requests 2.32.5",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.530312"
+    },
+    {
+      "test": "dependency_yaml",
+      "status": "PASS",
+      "message": "yaml 6.0.3",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.530317"
+    },
+    {
+      "test": "dependency_safetensors",
+      "status": "PASS",
+      "message": "safetensors 0.6.2",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.531240"
+    },
+    {
+      "test": "model_flux1-dev.safetensors",
+      "status": "PASS",
+      "message": "flux1-dev.safetensors: 22700.2MB",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.531308"
+    },
+    {
+      "test": "integrity_flux1-dev.safetensors",
+      "status": "PASS",
+      "message": "flux1-dev.safetensors readable",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.532003"
+    },
+    {
+      "test": "model_flux1-dev.safetensors",
+      "status": "PASS",
+      "message": "flux1-dev.safetensors: 22700.2MB",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.532257"
+    },
+    {
+      "test": "integrity_flux1-dev.safetensors",
+      "status": "PASS",
+      "message": "flux1-dev.safetensors readable",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.532965"
+    },
+    {
+      "test": "model_clip_l.safetensors",
+      "status": "PASS",
+      "message": "clip_l.safetensors: 234.7MB",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.533078"
+    },
+    {
+      "test": "integrity_clip_l.safetensors",
+      "status": "PASS",
+      "message": "clip_l.safetensors readable",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.533425"
+    },
+    {
+      "test": "model_t5xxl_fp8_e4m3fn.safetensors",
+      "status": "PASS",
+      "message": "t5xxl_fp8_e4m3fn.safetensors: 4667.2MB",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.533476"
+    },
+    {
+      "test": "integrity_t5xxl_fp8_e4m3fn.safetensors",
+      "status": "PASS",
+      "message": "t5xxl_fp8_e4m3fn.safetensors readable",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.534066"
+    },
+    {
+      "test": "model_ae.safetensors",
+      "status": "PASS",
+      "message": "ae.safetensors: 319.8MB",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.534125"
+    },
+    {
+      "test": "integrity_ae.safetensors",
+      "status": "PASS",
+      "message": "ae.safetensors readable",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.534439"
+    },
+    {
+      "test": "model_flux-add-details.safetensors",
+      "status": "PASS",
+      "message": "flux-add-details.safetensors: 655.6MB",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.534483"
+    },
+    {
+      "test": "integrity_flux-add-details.safetensors",
+      "status": "PASS",
+      "message": "flux-add-details.safetensors readable",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.535102"
+    },
+    {
+      "test": "model_flux-antiblur.safetensors",
+      "status": "PASS",
+      "message": "flux-antiblur.safetensors: 655.6MB",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.535159"
+    },
+    {
+      "test": "integrity_flux-antiblur.safetensors",
+      "status": "PASS",
+      "message": "flux-antiblur.safetensors readable",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.535663"
+    },
+    {
+      "test": "comfyui_server",
+      "status": "PASS",
+      "message": "ComfyUI server responding",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.542058"
+    },
+    {
+      "test": "comfyui_version",
+      "status": "INFO",
+      "message": "ComfyUI 0.3.60",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.542068"
+    },
+    {
+      "test": "pytorch_version",
+      "status": "INFO",
+      "message": "PyTorch 2.5.1+cu121",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.542072"
+    },
+    {
+      "test": "gpu_detection",
+      "status": "PASS",
+      "message": "GPU detected: cuda:0 NVIDIA GeForce RTX 4060 Ti : cudaMallocAsync",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.542076"
+    },
+    {
+      "test": "vram_status",
+      "status": "PASS",
+      "message": "VRAM: 1.9GB free / 16.0GB total",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.542083"
+    },
+    {
+      "test": "api__queue",
+      "status": "PASS",
+      "message": "Queue API working",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.543566"
+    },
+    {
+      "test": "api__object_info",
+      "status": "PASS",
+      "message": "Object Info API working",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.645104"
+    },
+    {
+      "test": "api__history",
+      "status": "PASS",
+      "message": "History API working",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.646654"
+    },
+    {
+      "test": "api__system_stats",
+      "status": "PASS",
+      "message": "System Stats API working",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.650523"
+    },
+    {
+      "test": "unet_model_detection",
+      "status": "PASS",
+      "message": "Flux.1-dev UNET model detected",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.722966"
+    },
+    {
+      "test": "clip_models_detection",
+      "status": "PASS",
+      "message": "CLIP models detected",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.722989"
+    },
+    {
+      "test": "lora_detection",
+      "status": "PASS",
+      "message": "All LoRAs detected: ['flux-add-details.safetensors', 'flux-antiblur.safetensors']",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.722998"
+    },
+    {
+      "test": "vae_detection",
+      "status": "PASS",
+      "message": "Flux VAE detected",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.723003"
+    },
+    {
+      "test": "workflow_submission",
+      "status": "PASS",
+      "message": "Test workflow submitted: 0645c401-5a91-41f9-9eb1-e96a76763e8f",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:09.727575"
+    },
+    {
+      "test": "image_generation",
+      "status": "PASS",
+      "message": "Test image generated in 2.0s",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:11.729707"
+    },
+    {
+      "test": "output_file",
+      "status": "PASS",
+      "message": "Output file: luxury_entrepreneur_portrait_00003_.png (0.23MB)",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:11.729771"
+    },
+    {
+      "test": "git_repo",
+      "status": "PASS",
+      "message": "Git repository initialized",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:11.729941"
+    },
+    {
+      "test": "git_user_name",
+      "status": "PASS",
+      "message": "Git user.name: Jonathan Mallinger",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:11.733032"
+    },
+    {
+      "test": "git_user_email",
+      "status": "PASS",
+      "message": "Git user.email: jdm@isn.biz",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:11.735554"
+    },
+    {
+      "test": "gitignore_content",
+      "status": "WARN",
+      "message": "Missing exclusions: ['ComfyUI/models/']",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:11.735709"
+    },
+    {
+      "test": "script_activate_workspace_sh",
+      "status": "PASS",
+      "message": "activate_workspace.sh exists and executable",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:11.735746"
+    },
+    {
+      "test": "script_sync_to_github_sh",
+      "status": "PASS",
+      "message": "sync_to_github.sh exists and executable",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:11.735761"
+    },
+    {
+      "test": "script_start_comfyui_sh",
+      "status": "PASS",
+      "message": "start_comfyui.sh exists and executable",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:11.735775"
+    },
+    {
+      "test": "script_test_models_py",
+      "status": "PASS",
+      "message": "test_models.py exists and executable",
+      "details": null,
+      "timestamp": "2025-09-29T20:15:11.735787"
+    }
+  ],
+  "generated_at": "2025-09-29T20:15:11.735803"
+}

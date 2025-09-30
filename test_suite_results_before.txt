@@ -1,0 +1,65 @@
+🧪 AI Workspace Comprehensive Test Suite
+==================================================
+[2025-09-29 20:03:35] [INFO] ============================================================
+[2025-09-29 20:03:35] [INFO] Starting Comprehensive AI Workspace Test Suite
+[2025-09-29 20:03:35] [INFO] ============================================================
+[2025-09-29 20:03:35] [INFO] 
+--- System Tests ---
+[2025-09-29 20:03:35] [INFO] Running test: GPU Availability
+[2025-09-29 20:03:35] [INFO] Test GPU Availability: PASS (0.15s) - GPU OK: NVIDIA GeForce RTX 4060 Ti (16380MB)
+[2025-09-29 20:03:35] [INFO] Running test: Python Environment
+[2025-09-29 20:03:39] [INFO] Test Python Environment: PASS (3.32s) - Python environment OK (7 packages)
+[2025-09-29 20:03:39] [INFO] Running test: Directory Structure
+[2025-09-29 20:03:39] [INFO] Test Directory Structure: PASS (0.00s) - Directory structure OK (11 dirs)
+[2025-09-29 20:03:39] [INFO] Running test: Disk Space
+[2025-09-29 20:03:39] [INFO] Test Disk Space: PASS (0.00s) - Disk space OK: 803G available
+[2025-09-29 20:03:39] [INFO] 
+--- Model Tests ---
+[2025-09-29 20:03:39] [INFO] Running test: Model Files
+[2025-09-29 20:03:39] [INFO] Test Model Files: PASS (0.00s) - All models found (17919.9 GB total)
+[2025-09-29 20:03:39] [INFO] Running test: Model Integrity
+[2025-09-29 20:03:39] [INFO] Test Model Integrity: PASS (0.06s) - Model integrity OK (3 files checked)
+[2025-09-29 20:03:39] [INFO] 
+--- ComfyUI Tests ---
+[2025-09-29 20:03:39] [INFO] Running test: ComfyUI Installation
+[2025-09-29 20:03:39] [INFO] Test ComfyUI Installation: FAIL (0.00s) - Missing ComfyUI files: ['model_management.py']
+[2025-09-29 20:03:39] [INFO] Running test: ComfyUI Startup
+[2025-09-29 20:03:55] [INFO] Test ComfyUI Startup: PASS (16.13s) - ComfyUI starts successfully
+[2025-09-29 20:03:55] [INFO] 
+--- Ollama Tests ---
+[2025-09-29 20:03:55] [INFO] Running test: Ollama Service
+[2025-09-29 20:03:55] [INFO] Test Ollama Service: PASS (0.12s) - Ollama OK (5 models)
+[2025-09-29 20:03:55] [INFO] Running test: Prompt Generation
+[2025-09-29 20:04:25] [INFO] Test Prompt Generation: FAIL (30.01s) - Prompt generation timeout
+[2025-09-29 20:04:25] [INFO] 
+--- Workflow Tests ---
+[2025-09-29 20:04:25] [INFO] Running test: Workflow Files
+[2025-09-29 20:04:25] [INFO] Test Workflow Files: PASS (0.01s) - Workflows OK (28 files)
+[2025-09-29 20:04:25] [INFO] 
+--- Visual Tests ---
+[2025-09-29 20:04:25] [INFO] Running test: Baseline Images
+[2025-09-29 20:04:25] [INFO] Test Baseline Images: SKIP (0.00s) - No baseline images found
+[2025-09-29 20:04:25] [INFO] Running test: ImageMagick
+[2025-09-29 20:04:25] [INFO] Test ImageMagick: PASS (0.06s) - ImageMagick available
+[2025-09-29 20:04:25] [INFO] Test report saved to: /home/jdm/ai-workspace/test_report.json
+[2025-09-29 20:04:25] [INFO] 
+============================================================
+[2025-09-29 20:04:25] [INFO] TEST SUMMARY
+[2025-09-29 20:04:25] [INFO] ============================================================
+[2025-09-29 20:04:25] [INFO] Total Tests: 13
+[2025-09-29 20:04:25] [INFO] Duration: 49.86s
+[2025-09-29 20:04:25] [INFO] Success Rate: 76.9%
+[2025-09-29 20:04:25] [INFO] 
+[2025-09-29 20:04:25] [INFO] ✅ PASS: 10
+[2025-09-29 20:04:25] [INFO] ❌ FAIL: 2
+[2025-09-29 20:04:25] [INFO] ⚠️  WARN: 0
+[2025-09-29 20:04:25] [INFO] ⏭️  SKIP: 1
+[2025-09-29 20:04:25] [INFO] 
+🚨 CRITICAL FAILURES:
+[2025-09-29 20:04:25] [INFO]   • ComfyUI Installation: Missing ComfyUI files: ['model_management.py']
+[2025-09-29 20:04:25] [INFO]   • Prompt Generation: Prompt generation timeout
+[2025-09-29 20:04:25] [INFO] 
+🎯 Overall Status: GOOD
+[2025-09-29 20:04:25] [INFO] ============================================================
+
+❌ Tests failed! Check the report for details.
