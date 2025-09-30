@@ -11,7 +11,7 @@ from pathlib import Path
 
 COMFYUI_URL = "http://localhost:8188"
 WORKFLOW_PATH = Path("workflows/flux_kontext_fp8_turbo.json")
-PROMPT_FILE = Path("ukrainian_portrait_prompt.txt")
+PROMPT_FILE = Path("ukrainian_portrait_prompt_optimized.txt")
 OUTPUT_PREFIX = "ukrainian_portrait_fp8"
 
 # Load the detailed prompt

@@ -94,8 +94,23 @@ def check_services() -> bool:
     return True
 
 def generate_enhanced_prompt(concept: str, variation: int = 1) -> Optional[str]:
-    """Generate enhanced prompt using Ollama with error handling"""
-    log(f"🧠 Generating prompt for: '{concept}' (variation {variation})", 'info')
+    """Generate FLUX-optimized prompt using Ollama with best practices"""
+    log(f"🧠 Generating FLUX-optimized prompt for: '{concept}' (variation {variation})", 'info')
+    
+    # FLUX optimization system prompt
+    flux_system = """You are a FLUX model prompt expert. Transform concepts into vivid, detailed prompts optimized for FLUX.1-dev/Kontext.
+
+FLUX Best Practices:
+- Use natural, flowing descriptions (not tags)
+- Include: subject details, pose, expression, clothing, lighting, setting
+- Add technical specs at end (lens, lighting setup)
+- Aim for 150-250 words
+- Avoid redundancy
+- Structure: Subject → Details → Setting → Technical
+- Focus on what you WANT
+
+Example: "A graceful young woman with flowing chestnut hair, standing in soft golden hour light. She wears an elegant cream silk dress, her gentle expression conveying quiet confidence. The setting is a minimalist studio with warm natural light. Shot with 85mm f/1.4 lens, shallow depth of field, photorealistic detail."
+"""
     
     # Variation instructions for diversity
     variation_styles = {
@@ -105,7 +120,7 @@ def generate_enhanced_prompt(concept: str, variation: int = 1) -> Optional[str]:
     }
     
     style_instruction = variation_styles.get(variation, variation_styles[1])
-    full_prompt = f"{style_instruction} for: {concept}"
+    full_prompt = f"{flux_system}\n\n{style_instruction} for: {concept}\n\nOptimized FLUX prompt:"
     
     payload = {
         "model": "mistral",
@@ -114,7 +129,7 @@ def generate_enhanced_prompt(concept: str, variation: int = 1) -> Optional[str]:
         "options": {
             "temperature": 0.7 + (variation * 0.1),  # Slight variation
             "top_p": 0.9,
-            "num_predict": 300  # Limit response length
+            "num_predict": 400  # Allow longer detailed prompts
         }
     }
     
