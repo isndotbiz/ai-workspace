@@ -1,0 +1,13 @@
+{
+  "version": "--output",
+  "timestamp": "2025-09-30 15:51:26",
+  "test_success": true,
+  "generation_time_seconds": 108.27601194381714,
+  "output_files_count": 1,
+  "test_prompt": "ultra-photoreal editorial portrait, 85mm lens, f/2 shallow DOF, golden hour rim light, subtle film grain, natural skin texture, freckles, detailed eyelashes, clean background bokeh, realistic proportions, accurate skin tone, high dynamic range",
+  "components": {
+    "comfyui_api": true,
+    "required_files": true,
+    "ollama_available": true
+  }
+}

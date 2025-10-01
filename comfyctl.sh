@@ -438,12 +438,12 @@ EOF
     note "🎨 Queuing Ukrainian portrait test..."
     
     # Queue the test
-    RESULT=\$(curl -s -X POST -H "Content-Type: application/json" $
-        -d "{\"prompt\": \$(cat \"$TEST_WORKFLOW\")}" $
+    RESULT=$(curl -s -X POST -H "Content-Type: application/json" \
+        -d "{\"prompt\": $(cat "$TEST_WORKFLOW")}" \
         http://127.0.0.1:8188/prompt)
     
     if echo "$RESULT" | grep -q "prompt_id"; then
-        PROMPT_ID=\$(echo "$RESULT" | grep -o '"prompt_id":"[^"]*"' | cut -d'"' -f4)
+        PROMPT_ID=$(echo "$RESULT" | grep -o '"prompt_id":"[^"]*"' | cut -d'"' -f4)
         note "✅ Test queued - Prompt ID: $PROMPT_ID"
         
         # Wait for generation to complete (simple polling)
@@ -451,7 +451,7 @@ EOF
         for i in {1..60}; do
             sleep 2
             # Check if new files appeared in output
-            LATEST_FILE=\$(find "$COMFY/output" -name "flux_kontext*.png" -newer "$TEST_WORKFLOW" 2>/dev/null | head -1)
+            LATEST_FILE=$(find "$COMFY/output" -name "flux_kontext*.png" -newer "$TEST_WORKFLOW" 2>/dev/null | head -1)
             if [ -n "$LATEST_FILE" ]; then
                 break
             fi
@@ -460,17 +460,17 @@ EOF
         echo ""
         
         # Find the generated file
-        LATEST_FILE=\$(find "$COMFY/output" -name "flux_kontext*.png" -newer "$TEST_WORKFLOW" 2>/dev/null | head -1)
+        LATEST_FILE=$(find "$COMFY/output" -name "flux_kontext*.png" -newer "$TEST_WORKFLOW" 2>/dev/null | head -1)
         
         if [ -n "$LATEST_FILE" ] && [ -f "$LATEST_FILE" ]; then
             cp "$LATEST_FILE" "$TMP_OUTPUT"
             
             # Calculate SHA256 hash
-            NEW_HASH=\$(sha256sum "$TMP_OUTPUT" | cut -d' ' -f1)
+            NEW_HASH=$(sha256sum "$TMP_OUTPUT" | cut -d' ' -f1)
             
             # Compare with baseline if it exists
             if [ -f "$BASELINE" ]; then
-                OLD_HASH=\$(sha256sum "$BASELINE" | cut -d' ' -f1)
+                OLD_HASH=$(sha256sum "$BASELINE" | cut -d' ' -f1)
                 
                 if [ "$NEW_HASH" = "$OLD_HASH" ]; then
                     note "⏭️ No change in render (hash match: ${NEW_HASH:0:8}...). Skipping commit."
@@ -485,7 +485,7 @@ EOF
                 fi
             else
                 mv "$TMP_OUTPUT" "$BASELINE"
-                SIZE_MB=\$(du -m "$BASELINE" | cut -f1)
+                SIZE_MB=$(du -m "$BASELINE" | cut -f1)
                 note "📸 New baseline created → $BASELINE (${SIZE_MB}MB, hash: ${NEW_HASH:0:8}...)"
                 git add "$BASELINE"
                 git commit -m "Created Ukrainian portrait baseline (${NEW_HASH:0:8})" || echo "Commit skipped"

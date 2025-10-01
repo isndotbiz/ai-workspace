@@ -1,14 +1,14 @@
 {
-  "timestamp": "2025-09-29 20:14:51",
-  "total_duration": 25.94,
+  "timestamp": "2025-09-30 23:15:43",
+  "total_duration": 16.7,
   "total_tests": 13,
   "status_counts": {
-    "PASS": 12,
+    "PASS": 13,
     "FAIL": 0,
     "WARN": 0,
-    "SKIP": 1
+    "SKIP": 0
   },
-  "success_rate": 92.3,
+  "success_rate": 100.0,
   "critical_failures": [],
   "warnings": [],
   "all_results": [
@@ -16,13 +16,13 @@
       "name": "GPU Availability",
       "status": "PASS",
       "message": "GPU OK: NVIDIA GeForce RTX 4060 Ti (16380MB)",
-      "duration": 0.1,
+      "duration": 0.06,
       "details": {
         "gpus": [
           {
             "name": "NVIDIA GeForce RTX 4060 Ti",
             "total_memory_mb": 16380,
-            "free_memory_mb": 1813
+            "free_memory_mb": 252
           }
         ]
       }
@@ -31,7 +31,7 @@
       "name": "Python Environment",
       "status": "PASS",
       "message": "Python environment OK (7 packages)",
-      "duration": 3.02,
+      "duration": 2.85,
       "details": {
         "installed": {
           "torch": "2.5.1+cu121",
@@ -68,13 +68,13 @@
     {
       "name": "Disk Space",
       "status": "PASS",
-      "message": "Disk space OK: 799G available",
+      "message": "Disk space OK: 786G available",
       "duration": 0.0,
       "details": {
         "total": "1007G",
-        "used": "157G",
-        "available": "799G",
-        "use_percent": "17%"
+        "used": "171G",
+        "available": "786G",
+        "use_percent": "18%"
       }
     },
     {
@@ -119,7 +119,7 @@
       "name": "Model Integrity",
       "status": "PASS",
       "message": "Model integrity OK (3 files checked)",
-      "duration": 0.02,
+      "duration": 0.03,
       "details": {
         "ComfyUI/models/checkpoints/flux1-dev-kontext_fp8_scaled.safetensors": "ff33d9de074f6e4e",
         "ComfyUI/models/clip/clip_l.safetensors": "55494418a40151a9",
@@ -130,7 +130,7 @@
       "name": "ComfyUI Installation",
       "status": "PASS",
       "message": "ComfyUI installation OK (13 custom nodes, API responding)",
-      "duration": 0.04,
+      "duration": 0.01,
       "details": {
         "custom_nodes": [
           "__pycache__",
@@ -154,16 +154,16 @@
       "name": "ComfyUI Startup",
       "status": "PASS",
       "message": "ComfyUI starts successfully",
-      "duration": 15.67,
+      "duration": 13.06,
       "details": {
-        "output_sample": "[START] Security scan\n[DONE] Security scan\n## ComfyUI-Manager: installing dependencies done.\n** ComfyUI startup time: 2025-09-29 20:14:29.868\n** Platform: Linux\n** Python version: 3.12.3 (main, Aug 14"
+        "output_sample": "[START] Security scan\n[DONE] Security scan\n## ComfyUI-Manager: installing dependencies done.\n** ComfyUI startup time: 2025-09-30 23:15:30.226\n** Platform: Linux\n** Python version: 3.12.3 (main, Aug 14"
       }
     },
     {
       "name": "Ollama Service",
       "status": "PASS",
       "message": "Ollama OK (5 models)",
-      "duration": 0.11,
+      "duration": 0.06,
       "details": {
         "available": [
           "mistral:7b",
@@ -178,16 +178,16 @@
       "name": "Prompt Generation",
       "status": "PASS",
       "message": "Prompt generation works",
-      "duration": 6.94,
+      "duration": 0.56,
       "details": {
-        "sample_response": "Hello! How can I assist you today?"
+        "sample_response": "Hello! How can I help you today?"
       }
     },
     {
       "name": "Workflow Files",
       "status": "PASS",
       "message": "Workflows OK (28 files)",
-      "duration": 0.01,
+      "duration": 0.02,
       "details": {
         "valid": [
           "flux_ultra_fast_8step.json",
@@ -224,16 +224,32 @@
     },
     {
       "name": "Baseline Images",
-      "status": "SKIP",
-      "message": "No baseline images found",
-      "duration": 0.0,
-      "details": {}
+      "status": "PASS",
+      "message": "Baseline images OK (2 images)",
+      "duration": 0.01,
+      "details": {
+        "images": [
+          {
+            "name": "baseline_ukrainian_v0_2_0.png",
+            "size": "1024x1024",
+            "mode": "RGB",
+            "file_size_kb": 1345.8
+          },
+          {
+            "name": "baseline_ukrainian_portrait.png",
+            "size": "1024x1024",
+            "mode": "RGB",
+            "file_size_kb": 1180.5
+          }
+        ],
+        "corrupted": []
+      }
     },
     {
       "name": "ImageMagick",
       "status": "PASS",
       "message": "ImageMagick available",
-      "duration": 0.03,
+      "duration": 0.04,
       "details": {
         "version": "Version: ImageMagick 6.9.12-98 Q16 x86_64 18038 https://legacy.imagemagick.org"
       }

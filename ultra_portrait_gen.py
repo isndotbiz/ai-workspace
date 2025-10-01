@@ -170,26 +170,40 @@ def load_workflow_template() -> Optional[Dict]:
         return None
 
 def customize_workflow(template: Dict, prompt: str, filename: str, seed: int) -> Dict:
-    """Customize workflow with specific parameters"""
+    """Customize workflow with specific parameters for Ukrainian portraits"""
     workflow = template.copy()
     
-    # Update text prompt (Node 5)
-    workflow['5']['inputs']['text'] = prompt
+    # Enhanced prompt for Ukrainian women - always add quality and anatomy keywords
+    enhanced_prompt = f"{prompt}, stunning beautiful Ukrainian woman, perfect anatomy, ideal body proportions, perfectly rendered hands and arms, photorealistic, high quality, detailed, masterpiece"
     
-    # Update batch size to 1 for single generation (Node 8)
-    workflow['8']['inputs']['batch_size'] = 1
+    # Update text prompt (Node 4 is positive prompt)
+    if '4' in workflow and 'inputs' in workflow['4']:
+        workflow['4']['inputs']['text'] = enhanced_prompt
     
-    # Update generation parameters optimized for FP8 (Node 9)
-    workflow['9']['inputs'].update({
-        'seed': seed,
-        'steps': 10,        # Optimal for FP8 Turbo (8-12 range)
-        'cfg': 1.0,         # Turbo LoRA uses lower CFG
-        'sampler_name': 'euler',
-        'scheduler': 'simple'
-    })
+    # Update batch size (Node 7 is EmptyLatentImage)
+    if '7' in workflow and 'inputs' in workflow['7']:
+        workflow['7']['inputs']['batch_size'] = 1
+        workflow['7']['inputs']['width'] = 1024
+        workflow['7']['inputs']['height'] = 1024
     
-    # Update filename (Node 11)
-    workflow['11']['inputs']['filename_prefix'] = filename
+    # Update generation parameters optimized for quality Ukrainian portraits (Node 8 is KSampler)
+    if '8' in workflow and 'inputs' in workflow['8']:
+        workflow['8']['inputs'].update({
+            'seed': seed,
+            'steps': 12,        # Higher steps for better quality
+            'cfg': 2.0,         # Balanced CFG for good prompt following
+            'sampler_name': 'euler',
+            'scheduler': 'simple',
+            'denoise': 1.0
+        })
+    
+    # Update CFG guidance (Node 6)
+    if '6' in workflow and 'inputs' in workflow['6']:
+        workflow['6']['inputs']['guidance'] = 2.0
+    
+    # Update filename (Node 10 is SaveImage)
+    if '10' in workflow and 'inputs' in workflow['10']:
+        workflow['10']['inputs']['filename_prefix'] = filename
     
     return workflow
 
