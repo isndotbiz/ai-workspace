@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-09-30 23:15:43",
-  "total_duration": 16.7,
+  "timestamp": "2025-10-01 10:37:18",
+  "total_duration": 20.58,
   "total_tests": 13,
   "status_counts": {
     "PASS": 13,
@@ -22,7 +22,7 @@
           {
             "name": "NVIDIA GeForce RTX 4060 Ti",
             "total_memory_mb": 16380,
-            "free_memory_mb": 252
+            "free_memory_mb": 7504
           }
         ]
       }
@@ -31,7 +31,7 @@
       "name": "Python Environment",
       "status": "PASS",
       "message": "Python environment OK (7 packages)",
-      "duration": 2.85,
+      "duration": 2.92,
       "details": {
         "installed": {
           "torch": "2.5.1+cu121",
@@ -68,12 +68,12 @@
     {
       "name": "Disk Space",
       "status": "PASS",
-      "message": "Disk space OK: 786G available",
+      "message": "Disk space OK: 785G available",
       "duration": 0.0,
       "details": {
         "total": "1007G",
         "used": "171G",
-        "available": "786G",
+        "available": "785G",
         "use_percent": "18%"
       }
     },
@@ -154,16 +154,16 @@
       "name": "ComfyUI Startup",
       "status": "PASS",
       "message": "ComfyUI starts successfully",
-      "duration": 13.06,
+      "duration": 16.31,
       "details": {
-        "output_sample": "[START] Security scan\n[DONE] Security scan\n## ComfyUI-Manager: installing dependencies done.\n** ComfyUI startup time: 2025-09-30 23:15:30.226\n** Platform: Linux\n** Python version: 3.12.3 (main, Aug 14"
+        "output_sample": "[START] Security scan\n[DONE] Security scan\n## ComfyUI-Manager: installing dependencies done.\n** ComfyUI startup time: 2025-10-01 10:37:01.204\n** Platform: Linux\n** Python version: 3.12.3 (main, Aug 14"
       }
     },
     {
       "name": "Ollama Service",
       "status": "PASS",
       "message": "Ollama OK (5 models)",
-      "duration": 0.06,
+      "duration": 0.04,
       "details": {
         "available": [
           "mistral:7b",
@@ -178,9 +178,9 @@
       "name": "Prompt Generation",
       "status": "PASS",
       "message": "Prompt generation works",
-      "duration": 0.56,
+      "duration": 1.12,
       "details": {
-        "sample_response": "Hello! How can I help you today?"
+        "sample_response": "Hello there! How can I assist you today?"
       }
     },
     {
@@ -226,7 +226,7 @@
       "name": "Baseline Images",
       "status": "PASS",
       "message": "Baseline images OK (2 images)",
-      "duration": 0.01,
+      "duration": 0.02,
       "details": {
         "images": [
           {

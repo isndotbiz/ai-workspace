@@ -1,0 +1,11 @@
+{
+    "workflow_name": "Flux Kontext Multi-Image Chaining",
+    "description": "Chain multiple reference images for identity + background control",
+    "note": "Import from ComfyUI community or NextDiffusion examples",
+    "recommended_settings": {
+        "steps": "28-36",
+        "guidance": "3.0-4.0", 
+        "resolution": "832-1024 long side",
+        "lora_strength": "0.6-0.8"
+    }
+}

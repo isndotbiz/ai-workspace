@@ -1,0 +1,11 @@
+{
+    "workflow_name": "Flux Kontext Multi-Image Stitching", 
+    "description": "Stitch multiple images for complex compositions",
+    "note": "Import from ComfyUI community or NextDiffusion examples",
+    "recommended_settings": {
+        "steps": "32-40",
+        "guidance": "3.5-4.5",
+        "resolution": "1024x1024",
+        "memory_optimization": "Use sequential processing"
+    }
+}
