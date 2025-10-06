@@ -299,7 +299,7 @@ EOF
     note "Ollama + prompt helper ready"
 }
 
-prune_old_gguf(){
+verify_fp8_only(){
     note "Scanning for *.gguf files (dry-run)"
     
     # Find all GGUF files
@@ -541,7 +541,7 @@ menu(){
 4) Install Face Detailer workflow + dependencies
 5) Curate photoreal LoRAs (Kontext-compatible)
 6) Enable Ollama + Prompt Helper (AI assistant)
-7) Prune old GGUF files (cleanup, optional)
+7) Verify FP8-only architecture (no GGUF remnants)
 8) Run smoke test (API + models verification)
 9) Expand prompt with AI (Ollama helper)
 h) Hunt & test LoRAs (advanced comparison)
@@ -561,7 +561,7 @@ TXT
         4) install_face_detailer;;
         5) curate_photoreal_loras;;
         6) enable_ollama;;
-        7) prune_old_gguf;;
+        7) verify_fp8_only;;
         8) smoke_test;;
         9) 
             echo ""

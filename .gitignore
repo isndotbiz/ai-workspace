@@ -30,3 +30,7 @@ Thumbs.db
 # Backup files
 *.bak
 *~
+
+# FP8-only architecture - block GGUF files
+*.gguf
+**/*.gguf
