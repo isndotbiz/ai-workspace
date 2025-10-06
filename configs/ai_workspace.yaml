@@ -1,0 +1,34 @@
+comfyui:
+  api_timeout: 10
+  enable_cors: true
+  host: 0.0.0.0
+  port: 8188
+  startup_timeout: 30
+comfyui_dir: /home/jdm/ai-workspace/ComfyUI
+cuda_only: true
+debug: false
+log_level: INFO
+models:
+  clip_encoder_path: ComfyUI/models/clip/clip_l.safetensors
+  fp8_model_path: ComfyUI/models/checkpoints/flux1-dev-kontext_fp8_scaled.safetensors
+  t5_encoder_path: ComfyUI/models/clip/t5xxl_fp8_e4m3fn.safetensors
+  turbo_lora_path: ComfyUI/models/loras/FLUX.1-Turbo-Alpha.safetensors
+  vae_path: ComfyUI/models/vae/ae.safetensors
+ollama:
+  default_model: mistral:7b
+  host: 127.0.0.1
+  max_tokens: 512
+  port: 11434
+  timeout: 30
+output_dir: /home/jdm/ai-workspace/output
+workflow:
+  default_batch_size: 1
+  default_cfg: 3.5
+  default_resolution:
+  - 1024
+  - 1024
+  default_steps: 28
+  multi_image_cfg: 4.0
+  multi_image_steps: 32
+workflows_dir: /home/jdm/ai-workspace/workflows_clean
+workspace_dir: /home/jdm/ai-workspace
