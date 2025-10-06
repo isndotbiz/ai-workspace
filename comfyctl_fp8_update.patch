@@ -1,0 +1,39 @@
+verify_fp8_only(){
+    note "Verifying FP8-only architecture (scanning for GGUF remnants)"
+    
+    # Check for any remaining GGUF files
+    GGUF_FILES=$(find "$ROOT" -name "*.gguf" -type f 2>/dev/null || true)
+    
+    if [ -n "$GGUF_FILES" ]; then
+        note "❌ Found GGUF remnants - cleaning up:"
+        echo "$GGUF_FILES" | while read -r file; do
+            [ -f "$file" ] && echo "  $(du -h "$file" | cut -f1) $file"
+        done
+        
+        read -rp "Remove all GGUF files? [y/N]: " yn
+        if [[ "${yn:-N}" =~ ^[Yy]$ ]]; then
+            echo "$GGUF_FILES" | while read -r file; do
+                [ -f "$file" ] && rm -f "$file" && note "Deleted: $file"
+            done
+            note "✅ GGUF cleanup completed - Pure FP8 architecture verified"
+        fi
+    else
+        note "✅ No GGUF files found - Pure FP8 architecture confirmed"
+    fi
+    
+    # Verify FP8 model presence
+    if [ -f "$DIFFUSION/flux1-dev-kontext_fp8_scaled.safetensors" ]; then
+        SIZE=$(du -h "$DIFFUSION/flux1-dev-kontext_fp8_scaled.safetensors" | cut -f1)
+        note "✅ FP8 Kontext model active ($SIZE)"
+    else
+        note "❌ FP8 Kontext model missing - run option 1 to install"
+    fi
+    
+    # Check for FP8 encoders
+    if [ -f "$CLIP/t5xxl_fp8_e4m3fn.safetensors" ]; then
+        SIZE=$(du -h "$CLIP/t5xxl_fp8_e4m3fn.safetensors" | cut -f1)
+        note "✅ T5-XXL FP8 encoder active ($SIZE)"
+    fi
+    
+    note "FP8 architecture verification completed"
+}

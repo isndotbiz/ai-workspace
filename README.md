@@ -8,6 +8,18 @@ A comprehensive, automated AI workspace optimized for RTX 4060 Ti 16GB, featurin
 cd ~/ai-workspace
 ./quick_multi_image.sh  # Interactive multi-image workflow launcher
 # OR
+
+
+## ⚠️ CUDA-Only Configuration
+
+**This system is configured for CUDA-only operation:**
+- CPU-only PyTorch is blocked
+- FP8 models require CUDA acceleration  
+- RTX 4060 Ti optimization enforced
+- All workflows require GPU acceleration
+
+If CUDA is not available, the system will refuse to start to prevent degraded performance.
+
 ./comfyctl.sh          # Full control panel
 ```
 
